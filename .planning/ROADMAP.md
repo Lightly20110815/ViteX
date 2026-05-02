@@ -25,7 +25,13 @@ ViteX ships in two phases. Phase 1 delivers the core product: a single-page Twit
   4. The page renders correctly whether the system is in light or dark mode, with no visible flash of wrong theme on first paint, and the layout adapts to both desktop and mobile viewports.
   5. A tweet file with intentionally malformed YAML frontmatter does not crash the build -- the site still deploys, with the broken file skipped and a warning logged.
 
-**Plans**: TBD
+**Plans**: 4 plans in 3 waves
+
+Plans:
+- [ ] 01-01-PLAN.md -- Project scaffold, TypeScript types, profile data, sample tweet (wave 1)
+- [ ] 01-02-PLAN.md -- CSS design system (glassmorphism, dark/light mode, responsive) + Profile component (wave 2)
+- [ ] 01-03-PLAN.md -- Vite build pipeline (custom plugin, gray-matter, marked, highlight.js) (wave 2)
+- [ ] 01-04-PLAN.md -- Timeline rendering (glob loader, TweetCard, Timeline, main entry point) (wave 3)
 
 **UI hint**: yes
 
@@ -41,7 +47,13 @@ ViteX ships in two phases. Phase 1 delivers the core product: a single-page Twit
   2. Pushing a commit to the main branch triggers an automatic Vercel build that deploys the site to a live URL without manual intervention.
   3. The deployed site's HTML source includes title, description, and Open Graph image meta tags, producing a rich link preview when the URL is shared on social or messaging platforms.
 
-**Plans**: TBD
+**Plans**: 4 plans in 3 waves
+
+Plans:
+- [ ] 01-01-PLAN.md -- Project scaffold, TypeScript types, profile data, sample tweet (wave 1)
+- [ ] 01-02-PLAN.md -- CSS design system (glassmorphism, dark/light mode, responsive) + Profile component (wave 2)
+- [ ] 01-03-PLAN.md -- Vite build pipeline (custom plugin, gray-matter, marked, highlight.js) (wave 2)
+- [ ] 01-04-PLAN.md -- Timeline rendering (glob loader, TweetCard, Timeline, main entry point) (wave 3)
 
 ## Progress
 
