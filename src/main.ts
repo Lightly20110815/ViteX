@@ -12,14 +12,10 @@ function main(): void {
 }
 
 function renderFooter(): void {
-  const footerEl = document.getElementById('footer');
-  if (!footerEl) return;
-
-  const text = document.createElement('p');
-  text.className = 'footer-text';
+  const el = document.getElementById('footer');
+  if (!el) return;
   const year = new Date().getFullYear();
-  text.textContent = `Powered by ViteX · ${year}`;
-  footerEl.appendChild(text);
+  el.textContent = `Powered by ViteX · ${year}`;
 }
 
 if (document.readyState === 'loading') {

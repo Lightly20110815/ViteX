@@ -4,44 +4,49 @@ export function renderProfile(data: ProfileData): void {
   const profileEl = document.getElementById('profile');
   if (!profileEl) return;
 
-  const bgEl = document.createElement('div');
-  bgEl.className = 'page-bg';
-  bgEl.setAttribute('aria-hidden', 'true');
-  document.body.prepend(bgEl);
+  // Preload Bing background and reveal it
+  const bgLayer = document.querySelector<HTMLDivElement>('.bg-layer');
+  if (bgLayer) {
+    const preloader = new Image();
+    preloader.src = data.backgroundUrl;
+    preloader.onload = () => bgLayer.classList.add('loaded');
+    preloader.onerror = () => bgLayer.classList.add('loaded'); // Show even on error
+  }
 
-  const preloader = new Image();
-  preloader.src = data.backgroundUrl;
-  preloader.onload = () => {
-    bgEl.classList.add('loaded');
-  };
-  preloader.onerror = () => {};
+  // Avatar with fallback
+  const avatarWrap = document.createElement('div');
+  avatarWrap.className = 'hero-avatar-wrap';
 
   const avatar = document.createElement('img');
   avatar.src = data.avatarUrl;
   avatar.alt = "Sy's avatar";
-  avatar.className = 'profile-avatar';
+  avatar.className = 'hero-avatar';
   avatar.width = 96;
   avatar.height = 96;
-  avatar.loading = 'lazy';
+  avatar.loading = 'eager';
   avatar.decoding = 'async';
 
   avatar.onerror = () => {
     const fallback = document.createElement('div');
-    fallback.className = 'profile-avatar-fallback';
+    fallback.className = 'hero-avatar-fallback';
     fallback.textContent = 'Sy';
-    fallback.setAttribute('aria-label', "Sy's avatar (fallback)");
+    fallback.setAttribute('aria-label', "Sy's avatar (initial)");
     avatar.replaceWith(fallback);
   };
 
+  avatarWrap.appendChild(avatar);
+
+  // Username
   const username = document.createElement('h1');
-  username.className = 'profile-username';
+  username.className = 'hero-username';
   username.textContent = data.username;
 
+  // Bio
   const bio = document.createElement('p');
-  bio.className = 'profile-bio';
+  bio.className = 'hero-bio';
   bio.textContent = data.bio;
 
-  profileEl.appendChild(avatar);
+  profileEl.appendChild(avatarWrap);
   profileEl.appendChild(username);
   profileEl.appendChild(bio);
 }

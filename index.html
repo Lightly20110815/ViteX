@@ -1,32 +1,31 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; script-src 'self' 'unsafe-inline'; connect-src 'self';" />
-  <title>Sy's Timeline</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Sy — Timeline</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet" />
   <script>
     (function() {
-      var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      var mq = window.matchMedia('(prefers-color-scheme: light)');
+      document.documentElement.setAttribute('data-theme', mq.matches ? 'light' : 'dark');
+      mq.addEventListener('change', function(e) {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'light' : 'dark');
+      });
     })();
   </script>
 </head>
 <body>
-  <div id="app">
-    <section id="profile" aria-label="Profile"></section>
-    <div id="main-layout">
-      <aside id="sidebar" aria-label="Navigation"></aside>
-      <main id="content">
-        <div id="timeline" aria-label="Tweet timeline"></div>
-      </main>
-    </div>
-    <footer id="footer" role="contentinfo"></footer>
-  </div>
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+  <main class="app">
+    <header id="profile" class="hero" aria-label="Profile"></header>
+    <div id="timeline" class="timeline" aria-label="Tweets"></div>
+    <footer id="footer" class="footer" role="contentinfo"></footer>
+  </main>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
