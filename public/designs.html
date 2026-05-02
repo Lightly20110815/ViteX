@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ViteX — 8 UI Design Variants</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,system-ui,sans-serif;background:#0A0A0B;color:#F1F5F9;padding:40px 24px;line-height:1.6}
+  h1{font-size:36px;font-weight:800;text-align:center;margin-bottom:8px;letter-spacing:-0.03em;background:linear-gradient(135deg,#F59E0B,#DB2777,#7C3AED,#06B6D4,#30B454);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .subtitle{text-align:center;color:#64748B;font-size:14px;margin-bottom:48px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;max-width:1400px;margin:0 auto}
+  .card{background:#141416;border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;transition:transform 0.2s ease,box-shadow 0.2s ease}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+  .card-preview{width:100%;aspect-ratio:16/10;background:var(--preview-bg);border-bottom:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden}
+  .card-info{padding:20px}
+  .card-number{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#64748B;margin-bottom:4px}
+  .card-name{font-size:20px;font-weight:700;color:#F1F5F9;margin-bottom:4px}
+  .card-mood{font-size:13px;color:#94A3B8;margin-bottom:12px}
+  .card-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:11px;padding:3px 10px;border-radius:9999px;background:rgba(255,255,255,0.06);color:#94A3B8;white-space:nowrap}
+  .files{font-size:11px;color:#475569;margin-top:12px;font-family:monospace}
+  .best-badge{display:inline-block;background:linear-gradient(135deg,#F59E0B,#D97706);color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle}
+  .footer{text-align:center;padding:48px 0 24px;color:#475569;font-size:12px}
+  @media(max-width:768px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<h1>ViteX Design Gallery</h1>
+<p class="subtitle">8 complete UI design variants · Each with unique layout, typography, and visual language</p>
+
+<div class="grid">
+
+<div class="card">
+  <div class="card-preview" style="background:linear-gradient(135deg,#06060E 0%,#0C0C1A 50%,#0F0F23 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+    <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#4C1D95);box-shadow:0 0 20px rgba(124,58,237,0.4);"></div>
+    <div style="width:120px;height:4px;border-radius:2px;background:rgba(124,58,237,0.3);"></div>
+    <div style="width:200px;height:60px;border-radius:8px;background:rgba(12,12,26,0.8);border:1px solid rgba(124,58,237,0.2);display:flex;align-items:center;padding:0 12px">
+      <div style="width:60px;height:6px;border-radius:3px;background:rgba(6,182,212,0.4);"></div>
+    </div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">01</div>
+    <div class="card-name">Neon Noir <span class="best-badge">BEST MATCH</span></div>
+    <div class="card-mood">暗夜霓虹 · 赛博极简 · 深色首选</div>
+    <div class="card-tags"><span class="tag">Dark-only</span><span class="tag">Space Grotesk</span><span class="tag">Neon Purple+Cyan</span><span class="tag">Grid overlay</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-preview" style="background:#FAFAFA;display:flex;align-items:center;justify-content:center;gap:12px;padding:20px">
+    <div style="width:40px;height:40px;border-radius:2px;background:#09090B;"></div>
+    <div style="flex:1"><div style="font-size:16px;font-weight:800;color:#09090B;margin-bottom:4px">Swiss Grid</div><div style="width:80px;height:2px;background:#E5E5E5"></div></div>
+    <div style="width:80px;height:40px;border:1px solid #E5E5E5;display:flex;align-items:center;justify-content:center;font-size:10px;color:#A1A1AA">TIMELINE</div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">02</div>
+    <div class="card-name">Swiss Grid</div>
+    <div class="card-mood">瑞士网格 · 纯净排版 · 理性设计</div>
+    <div class="card-tags"><span class="tag">Light+Dark</span><span class="tag">Inter</span><span class="tag">Monochrome+Blue</span><span class="tag">2-col grid</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-preview" style="background:linear-gradient(135deg,#FEFCF5 0%,#FDF8EE 50%,#FEF9F0 100%);display:flex;align-items:center;justify-content:center;gap:16px;padding:20px">
+    <div style="width:40px;height:40px;border-radius:45%55%52%48%/48%50%50%52%;background:linear-gradient(135deg,#5B8C5A,#B8963E);box-shadow:0 2px 12px rgba(139,115,85,0.1);"></div>
+    <div><div style="font-family:Georgia,serif;font-size:14px;font-weight:600;color:#3D3226;margin-bottom:4px">Wabi-Sabi</div><div style="font-size:10px;color:#8B7355;font-style:italic">侘寂の美</div></div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">03</div>
+    <div class="card-name">Wabi-Sabi <span class="best-badge">TOP PICK</span></div>
+    <div class="card-mood">侘寂和纸 · 有机温暖 · 手工质感</div>
+    <div class="card-tags"><span class="tag">Light+Dark</span><span class="tag">Lora+Raleway</span><span class="tag">Warm+Sage+Gold</span><span class="tag">Kintsugi</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-preview" style="background:#F5F5F7;display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;padding:16px">
+    <div style="grid-column:1/3;grid-row:1/3;background:#FFF;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,0.04);padding:12px"><div style="width:24px;height:24px;border-radius:50%;background:#0071E3;margin-bottom:8px"></div><div style="width:60px;height:8px;background:#1D1D1F;border-radius:4px;margin-bottom:4px"></div><div style="width:40px;height:4px;background:#AEAEB2;border-radius:2px"></div></div>
+    <div style="background:#FFF;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,0.04);padding:12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#F56300">32</div>
+    <div style="background:#FFF;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,0.04);padding:12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#30B454">1.2k</div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">04</div>
+    <div class="card-name">Bento Gallery</div>
+    <div class="card-mood">本顿画廊 · 模块拼接 · Apple 风格</div>
+    <div class="card-tags"><span class="tag">Light+Dark</span><span class="tag">Inter</span><span class="tag">Multi-accent</span><span class="tag">CSS Grid tiles</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-preview" style="background:#000;display:flex;flex-direction:column;padding:24px;gap:12px">
+    <div style="font-family:monospace;font-size:32px;font-weight:700;color:#FFF;text-transform:uppercase">BRUTAL</div>
+    <div style="border:4px solid #FFF;height:40px;display:flex;align-items:center;padding:0 12px"><div style="width:80px;height:8px;background:#FFF"></div></div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">05</div>
+    <div class="card-name">Brutalist Bold</div>
+    <div class="card-mood">粗野宣言 · 黑白分明 · 原始力量</div>
+    <div class="card-tags"><span class="tag">Dark+Light</span><span class="tag">Space Mono</span><span class="tag">Pure B&W</span><span class="tag">4px borders</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-preview" style="background:linear-gradient(135deg,#FEF9F0,#FDF5E8,#FEFCF5);display:flex;align-items:center;padding:20px;gap:16px;position:relative">
+    <div style="position:absolute;left:24px;top:20px;bottom:20px;width:1px;background:rgba(139,105,20,0.2)"></div>
+    <div style="position:absolute;left:20px;top:24px;width:9px;height:9px;border-radius:50%;background:#D97706;box-shadow:0 0 0 4px #FEF9F0"></div>
+    <div style="margin-left:32px;padding:12px 16px;background:#FDF5E8;border:1px solid rgba(139,105,20,0.15);border-radius:4px;transform:rotate(0.5deg)">
+      <div style="font-family:Georgia,serif;font-size:12px;color:#3C2415;margin-bottom:4px">Film grain overlay</div>
+      <div style="font-size:10px;color:#8B6914;font-style:italic">nostalgic · warm · analog</div>
+    </div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">06</div>
+    <div class="card-name">Film Memory</div>
+    <div class="card-mood">胶片记忆 · 怀旧温暖 · 日记质感</div>
+    <div class="card-tags"><span class="tag">Light+Dark</span><span class="tag">Abril+Merriweather</span><span class="tag">Sepia+Amber</span><span class="tag">Timeline rail</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-preview" style="background:linear-gradient(135deg,#FDF2F8,#FEF3C7,#F0F9FF);display:flex;align-items:center;justify-content:center;gap:12px;position:relative">
+    <div style="position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(219,39,119,0.15);filter:blur(30px);top:10px;right:30px"></div>
+    <div style="width:100px;height:60px;background:rgba(255,255,255,0.5);backdrop-filter:blur(12px);border-radius:12px;border:1px solid rgba(255,255,255,0.6);z-index:1;display:flex;align-items:center;justify-content:center;font-size:10px;color:#4A1942">glass card</div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">07</div>
+    <div class="card-name">Liquid Glass</div>
+    <div class="card-mood">流光玻璃 · 彩虹光晕 · 深度层次</div>
+    <div class="card-tags"><span class="tag">Light+Dark</span><span class="tag">Varela+Nunito</span><span class="tag">Pink+Gold+Blue</span><span class="tag">Floating orbs</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-preview" style="background:#F8F6F4;display:grid;grid-template-columns:180px 1fr;gap:16px;padding:16px">
+    <div style="border-right:1px solid #E8E5E0;display:flex;flex-direction:column;gap:8px;padding-right:12px"><div style="width:24px;height:24px;border-radius:2px;background:#1A1A1A;margin-bottom:8px"></div><div style="width:40px;height:4px;background:#B0B0B0;border-radius:2px"></div><div style="width:30px;height:4px;background:#B0B0B0;border-radius:2px"></div></div>
+    <div><div style="font-family:serif;font-size:28px;font-weight:300;color:#1A1A1A;margin-bottom:8px">12</div><div style="font-size:10px;color:#B0B0B0;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">May 2026</div><div style="width:60px;height:4px;background:#C9A84C;border-radius:2px"></div></div>
+  </div>
+  <div class="card-info">
+    <div class="card-number">08</div>
+    <div class="card-name">Ink Studio</div>
+    <div class="card-mood">墨色工作室 · 编辑排版 · 大开本设计</div>
+    <div class="card-tags"><span class="tag">Light+Dark</span><span class="tag">Space Grotesk+Archivo</span><span class="tag">Paper+Gold</span><span class="tag">Sticky rail</span></div>
+    <div class="files">styles.css · index.html</div>
+  </div>
+</div>
+
+</div>
+
+<p class="footer">ViteX Design System · 8 variants · Each with complete CSS + HTML · <span style="color:#94A3B8">All files in .planning/design-variants/</span></p>
+</body>
+</html>
