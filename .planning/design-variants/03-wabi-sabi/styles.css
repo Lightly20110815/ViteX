@@ -1,0 +1,271 @@
+/* ===== Variant 3 — Wabi-Sabi (侘寂和紙) =====
+   Organic · Warm · Textured · Asymmetric
+   Typography: Lora + Raleway + Noto Serif JP
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600&family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  --font-serif: "Lora", "Noto Serif JP", Georgia, serif;
+  --font-sans: "Raleway", "Noto Sans SC", system-ui, sans-serif;
+  --bg-warm: #FEFCF5;
+  --bg-card: #FEFDF8;
+  --bg-cream: #FDF8EE;
+  --border-warm: rgba(139, 115, 85, 0.12);
+  --text-primary: #3D3226;
+  --text-secondary: #8B7355;
+  --text-tertiary: #B8A088;
+  --accent-green: #5B8C5A;
+  --accent-pink: #C27B7B;
+  --accent-gold: #B8963E;
+  --shadow-warm: 0 2px 12px rgba(139, 115, 85, 0.06), 0 0 0 1px rgba(139, 115, 85, 0.04);
+  --radius-organic: 12px 18px 14px 16px;
+  --radius-organic-2: 16px 10px 20px 13px;
+  --radius-organic-3: 10px 20px 12px 18px;
+}
+
+:root[data-theme="dark"] {
+  --bg-warm: #1C1814;
+  --bg-card: #241F1A;
+  --bg-cream: #2A231C;
+  --border-warm: rgba(184, 160, 136, 0.08);
+  --text-primary: #E8DDD4;
+  --text-secondary: #B8A088;
+  --text-tertiary: #8B7355;
+  --accent-green: #7CB87B;
+  --accent-pink: #D49B9B;
+  --shadow-warm: 0 2px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(184,160,136,0.04);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--bg-warm);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----- Organic Masonry Layout ----- */
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.hero {
+  padding: 56px 0 40px;
+  text-align: left;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-warm);
+  margin-bottom: 40px;
+}
+
+.hero-avatar-wrap { flex-shrink: 0; }
+
+.hero-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 45% 55% 52% 48% / 48% 50% 50% 52%;
+  object-fit: cover;
+  box-shadow: var(--shadow-warm);
+}
+
+.hero-avatar-fallback {
+  width: 80px;
+  height: 80px;
+  border-radius: 45% 55% 52% 48% / 48% 50% 50% 52%;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-gold));
+  color: #FEFDF8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  box-shadow: var(--shadow-warm);
+}
+
+.hero-username {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.hero-bio {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* ----- Timeline (masonry-like alternate) ----- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 48px;
+}
+
+.tweet-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-warm);
+  box-shadow: var(--shadow-warm);
+  padding: 24px 28px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+/* Alternate card shapes for organic feel */
+.tweet-card:nth-child(odd) { border-radius: var(--radius-organic); }
+.tweet-card:nth-child(even) { border-radius: var(--radius-organic-2); }
+
+.tweet-card:hover {
+  transform: translateY(-2px) rotate(0.1deg);
+  box-shadow: 0 4px 20px rgba(139, 115, 85, 0.1), 0 0 0 1px rgba(139, 115, 85, 0.06);
+}
+
+/* Gold "kintsugi" accent line on selected cards */
+.tweet-card:nth-child(3n)::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 24px; right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  opacity: 0.4;
+}
+
+.tweet-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dotted var(--border-warm);
+}
+
+.tweet-username {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.tweet-mood { font-size: 16px; }
+
+.tweet-time {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+
+.tweet-body {
+  font-size: 15px;
+  line-height: 1.8;
+  font-family: var(--font-serif);
+}
+
+.tweet-body p { margin-bottom: 12px; }
+.tweet-body p:last-child { margin-bottom: 0; }
+.tweet-body strong { font-weight: 700; color: var(--text-primary); }
+.tweet-body em { font-style: italic; color: var(--text-secondary); }
+
+.tweet-body a {
+  color: var(--accent-pink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.tweet-body a:hover { border-bottom-color: var(--accent-pink); }
+
+.tweet-body code {
+  font-size: 0.9em;
+  background: var(--bg-cream);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tweet-body pre {
+  background: var(--bg-cream);
+  border: 1px solid var(--border-warm);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  overflow-x: auto;
+  font-size: 13px;
+}
+.tweet-body pre code { background: none; padding: 0; }
+
+.tweet-body blockquote {
+  border-left: 3px solid var(--accent-gold);
+  padding: 4px 0 4px 16px;
+  margin: 14px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.tweet-body img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 12px 0;
+  box-shadow: var(--shadow-warm);
+}
+
+.tweet-body h1, .tweet-body h2, .tweet-body h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+
+/* Empty */
+.tweet-card-empty {
+  text-align: center;
+  padding: 64px 24px;
+  background: var(--bg-card);
+  border: 2px dashed var(--border-warm);
+  border-radius: var(--radius-organic);
+}
+.tweet-card-empty h2 {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.tweet-card-empty p { color: var(--text-tertiary); font-style: italic; }
+
+.footer {
+  text-align: center;
+  padding: 32px 0 48px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 640px) {
+  .app { padding: 0 16px; }
+  .hero { flex-direction: column-reverse; text-align: center; padding: 40px 0 28px; gap: 16px; }
+  .hero-username { font-size: 28px; }
+  .tweet-card { padding: 18px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms!important; transition-duration: 0.01ms!important; }
+}
