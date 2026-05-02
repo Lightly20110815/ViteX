@@ -1,0 +1,145 @@
+/* ===== Variant 9 — Cyber-Shinto (霓虹神社) =====
+   Japanese cyberpunk · Neon + Traditional · Torii red + Cyan
+   Typography: Zen Kaku Gothic + Noto Serif JP
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-gothic: "Zen Kaku Gothic New", "Noto Sans SC", sans-serif;
+  --font-serif: "Noto Serif JP", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --bg-void: #0A0A0F;
+  --bg-elevated: #11111A;
+  --bg-card: rgba(17,17,26,0.8);
+  --text-primary: #F0EDE8;
+  --text-secondary: #A89880;
+  --text-tertiary: #665544;
+  --torii-red: #D43D3D;
+  --temple-gold: #C9A84C;
+  --neon-cyan: #06D6D0;
+  --border-card: rgba(201,168,76,0.12);
+  --glow-red: rgba(212,61,61,0.3);
+  --glow-gold: rgba(201,168,76,0.2);
+  --glow-cyan: rgba(6,214,208,0.15);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-gothic);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--text-primary);
+  background: var(--bg-void);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Torii gate decorative elements */
+body::before {
+  content: ""; position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--torii-red), transparent);
+  z-index: 100; opacity: 0.6;
+}
+
+/* Floating lantern orbs */
+.lantern { position: fixed; border-radius: 50%; z-index: 0; pointer-events: none; filter: blur(60px); }
+.lantern-1 { width: 300px; height: 300px; background: rgba(212,61,61,0.06); top: -80px; left: -80px; animation: lanternFloat 15s ease-in-out infinite; }
+.lantern-2 { width: 250px; height: 250px; background: rgba(6,214,208,0.04); bottom: -60px; right: -60px; animation: lanternFloat 20s ease-in-out infinite reverse; }
+
+@keyframes lanternFloat {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(40px,-20px); }
+}
+
+.app { position: relative; z-index: 10; max-width: 600px; margin: 0 auto; padding: 0 20px; }
+
+/* Hero with torii-inspired top bar */
+.hero {
+  padding: 56px 0 36px;
+  text-align: center;
+  position: relative;
+}
+
+.hero::before {
+  content: ""; display: block; width: 60px; height: 2px;
+  background: var(--torii-red); margin: 0 auto 24px;
+  box-shadow: 0 0 12px var(--glow-red);
+}
+
+.hero-avatar-wrap { display: inline-block; position: relative; margin-bottom: 20px; }
+
+.hero-avatar {
+  width: 80px; height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 2px solid var(--border-card);
+  box-shadow: 0 0 0 6px var(--bg-void), 0 0 24px var(--glow-gold);
+}
+
+.hero-avatar-fallback {
+  width: 80px; height: 80px; border-radius: 4px;
+  background: linear-gradient(135deg, var(--torii-red), var(--temple-gold));
+  color: #FFF; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-size: 28px; font-weight: 700;
+  box-shadow: 0 0 0 6px var(--bg-void), 0 0 24px var(--glow-gold);
+  margin: 0 auto;
+}
+
+.hero-username {
+  font-family: var(--font-serif);
+  font-size: 32px; font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+}
+
+.hero-bio { margin-top: 8px; font-size: 13px; color: var(--text-secondary); max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.8; }
+
+/* Timeline with temple-gold dividing lines */
+.timeline { display: flex; flex-direction: column; gap: 20px; padding-bottom: 40px; }
+
+.tweet-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  border-radius: 4px;
+  padding: 24px 28px;
+  position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tweet-card::after {
+  content: ""; position: absolute; bottom: 0; left: 12px; right: 12px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--temple-gold), transparent);
+  opacity: 0; transition: opacity 0.3s ease;
+}
+
+.tweet-card:hover { border-color: rgba(201,168,76,0.3); box-shadow: 0 0 20px var(--glow-gold), 0 4px 16px rgba(0,0,0,0.4); }
+.tweet-card:hover::after { opacity: 0.3; }
+
+.tweet-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+.tweet-username { font-family: var(--font-serif); font-weight: 600; font-size: 16px; color: var(--text-primary); }
+.tweet-mood { font-size: 16px; }
+.tweet-time { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); }
+
+.tweet-body { font-size: 15px; line-height: 1.85; }
+.tweet-body p { margin-bottom: 10px; }
+.tweet-body strong { font-weight: 700; color: var(--text-primary); }
+.tweet-body a { color: var(--neon-cyan); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+.tweet-body a:hover { border-bottom-color: var(--neon-cyan); }
+.tweet-body code { font-family: var(--font-mono); font-size: 0.88em; background: rgba(201,168,76,0.1); color: var(--temple-gold); padding: 2px 6px; border-radius: 3px; }
+.tweet-body pre { background: rgba(0,0,0,0.4); border: 1px solid var(--border-card); border-left: 2px solid var(--torii-red); padding: 14px 18px; margin: 12px 0; overflow-x: auto; font-size: 13px; }
+.tweet-body blockquote { border-left: 2px solid var(--temple-gold); padding-left: 16px; margin: 14px 0; color: var(--text-secondary); font-style: italic; }
+.tweet-body img { max-width: 100%; border-radius: 4px; margin: 12px 0; }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-serif);font-weight:600;margin:20px 0 10px}
+
+.tweet-card-empty { text-align: center; padding: 64px 24px; }
+.tweet-card-empty h2 { font-family: var(--font-serif); font-size: 22px; margin-bottom: 8px; }
+.footer { text-align: center; padding: 24px 0 48px; font-family: var(--font-serif); font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.06em; }
+
+@media(max-width:640px){.app{padding:0 16px}.hero{padding:40px 0 24px}.hero-username{font-size:26px}.tweet-card{padding:18px 20px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}

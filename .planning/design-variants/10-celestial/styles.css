@@ -1,0 +1,142 @@
+/* ===== Variant 10 — Celestial (星空夜话) =====
+   Deep space · Starfield · Minimal · Contemplative
+   Typography: DM Sans + Noto Serif SC
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Noto+Serif+SC:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+:root {
+  --font-sans: "DM Sans", "Noto Sans SC", system-ui, sans-serif;
+  --font-serif: "Noto Serif SC", Georgia, serif;
+  --space-deep: #06080D;
+  --space-elevated: #0C1018;
+  --space-card: rgba(12, 16, 24, 0.85);
+  --text-primary: #E8ECF1;
+  --text-secondary: #8899AA;
+  --text-tertiary: #556677;
+  --star-blue: #8BB4E0;
+  --star-gold: #E8C56D;
+  --star-purple: #A78BFA;
+  --border-subtle: rgba(255,255,255,0.04);
+  --radius: 12px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--space-deep);
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(139,180,224,0.6), transparent),
+    radial-gradient(1px 1px at 60% 70%, rgba(139,180,224,0.4), transparent),
+    radial-gradient(1px 1px at 80% 20%, rgba(167,139,250,0.5), transparent),
+    radial-gradient(1px 1px at 40% 60%, rgba(232,197,109,0.4), transparent),
+    radial-gradient(1px 1px at 10% 80%, rgba(139,180,224,0.3), transparent),
+    radial-gradient(1px 1px at 90% 50%, rgba(167,139,250,0.3), transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Aurora gradient overlay */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 800px 300px at 50% 0%, rgba(139,180,224,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 200px at 80% 100%, rgba(167,139,250,0.04) 0%, transparent 70%);
+}
+
+/* Bing background as subtle nebula */
+.nebula {
+  position: fixed; inset: -60px; z-index: -1; pointer-events: none;
+  background-image: url("https://bing.img.run/rand.php");
+  background-size: cover; background-position: center;
+  filter: blur(80px) saturate(0.4) brightness(0.15);
+  opacity: 0; transition: opacity 2s ease;
+}
+.nebula.visible { opacity: 0.4; }
+
+.app { position: relative; z-index: 10; max-width: 620px; margin: 0 auto; padding: 0 20px; }
+
+/* Hero — minimal, centered, spacious */
+.hero { padding: 64px 0 48px; text-align: center; }
+
+.hero-avatar-wrap { display: inline-block; margin-bottom: 24px; }
+
+.hero-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-subtle);
+  filter: brightness(1.1) contrast(1.05);
+}
+
+.hero-avatar-fallback {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--star-blue), var(--star-purple));
+  color: #FFF; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-size: 28px; font-weight: 500;
+  margin: 0 auto; border: 1px solid var(--border-subtle);
+}
+
+.hero-username {
+  font-family: var(--font-serif);
+  font-size: 28px; font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.hero-bio { font-size: 13px; font-weight: 300; color: var(--text-secondary); max-width: 380px; margin: 0 auto; line-height: 1.9; }
+
+/* Timeline — airy, spaced */
+.timeline { display: flex; flex-direction: column; gap: 28px; padding-bottom: 48px; }
+
+.tweet-card {
+  background: var(--space-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  position: relative;
+}
+
+.tweet-card::before {
+  content: ""; position: absolute; top: -1px; left: 20px; right: 20px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139,180,224,0.2), transparent);
+  opacity: 0; transition: opacity 0.3s ease;
+}
+
+.tweet-card:hover { border-color: rgba(139,180,224,0.15); background: rgba(16,20,32,0.9); }
+.tweet-card:hover::before { opacity: 1; }
+
+.tweet-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+.tweet-username { font-family: var(--font-sans); font-weight: 500; font-size: 14px; color: var(--star-blue); letter-spacing: 0.04em; }
+.tweet-mood { font-size: 15px; }
+.tweet-time { margin-left: auto; font-size: 12px; font-weight: 300; color: var(--text-tertiary); }
+
+.tweet-body { font-size: 15px; line-height: 1.8; font-weight: 400; }
+.tweet-body p { margin-bottom: 10px; }
+.tweet-body strong { font-weight: 600; }
+.tweet-body a { color: var(--star-gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+.tweet-body a:hover { border-bottom-color: var(--star-gold); }
+.tweet-body code { font-size: 0.88em; background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px; color: var(--star-purple); }
+.tweet-body pre { background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 16px 20px; margin: 12px 0; overflow-x: auto; font-size: 13px; }
+.tweet-body blockquote { border-left: 1px solid var(--star-gold); padding-left: 16px; margin: 14px 0; color: var(--text-secondary); font-style: italic; }
+.tweet-body img { max-width: 100%; border-radius: var(--radius); margin: 12px 0; }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-serif);font-weight:500;margin:20px 0 10px;color:var(--star-blue)}
+
+.tweet-card-empty { text-align: center; padding: 64px 24px; }
+.tweet-card-empty h2 { font-family: var(--font-serif); font-size: 22px; font-weight: 500; margin-bottom: 8px; }
+
+.footer { text-align: center; padding: 24px 0 56px; font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.06em; }
+
+@media(max-width:640px){.app{padding:0 16px}.hero{padding:48px 0 32px}.tweet-card{padding:20px 22px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
