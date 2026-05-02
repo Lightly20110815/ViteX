@@ -1,0 +1,150 @@
+/* ===== Variant 12 — Paper Craft (纸艺剪影) =====
+   Cut-paper shadows · Pastel · Layered · Hand-made
+   Typography: Caveat + Quicksand
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+:root {
+  --font-hand: "Caveat", cursive;
+  --font-sans: "Quicksand", "Noto Sans SC", system-ui, sans-serif;
+  --bg-page: #FFFDF7;
+  --bg-card: #FFFFFF;
+  --text-primary: #3D3929;
+  --text-secondary: #8C8775;
+  --text-tertiary: #BFB9A5;
+  --accent-coral: #FF6B6B;
+  --accent-mint: #4ECDC4;
+  --accent-lavender: #A78BFA;
+  --shadow-cut: 0 4px 0 rgba(0,0,0,0.06), 0 8px 16px rgba(0,0,0,0.04);
+  --shadow-hover: 0 6px 0 rgba(0,0,0,0.08), 0 12px 24px rgba(0,0,0,0.06);
+  --radius-paper: 6px 30px 8px 24px;
+}
+
+:root[data-theme="dark"] {
+  --bg-page: #1A1814;
+  --bg-card: #24221E;
+  --text-primary: #E8E4D8;
+  --text-secondary: #9E9888;
+  --text-tertiary: #6E6858;
+  --shadow-cut: 0 4px 0 rgba(0,0,0,0.3), 0 8px 16px rgba(0,0,0,0.2);
+  --shadow-hover: 0 6px 0 rgba(0,0,0,0.4), 0 12px 24px rgba(0,0,0,0.3);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,107,107,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(78,205,196,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(167,139,250,0.05) 0%, transparent 50%);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+.hero {
+  padding: 48px 0 40px;
+  text-align: center;
+}
+
+.hero-avatar-wrap { display: inline-block; margin-bottom: 16px; position: relative; }
+
+.hero-avatar {
+  width: 88px; height: 88px;
+  border-radius: 40% 60% 55% 45% / 52% 48% 55% 45%;
+  object-fit: cover;
+  box-shadow: var(--shadow-cut);
+  transition: transform 0.3s ease;
+}
+
+.hero-avatar:hover { transform: rotate(-2deg) scale(1.05); }
+
+.hero-avatar-fallback {
+  width: 88px; height: 88px;
+  border-radius: 40% 60% 55% 45% / 52% 48% 55% 45%;
+  background: linear-gradient(135deg, var(--accent-coral), var(--accent-lavender));
+  color: #FFF; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-hand); font-size: 36px;
+  margin: 0 auto; box-shadow: var(--shadow-cut);
+}
+
+.hero-username {
+  font-family: var(--font-hand);
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.hero-bio {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  max-width: 420px;
+  margin-left: auto; margin-right: auto;
+}
+
+/* Timeline with paper-cut cards */
+.timeline { display: flex; flex-direction: column; gap: 32px; padding-bottom: 48px; }
+
+.tweet-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-cut);
+  padding: 28px 32px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Alternating card shapes */
+.tweet-card:nth-child(even) { border-radius: 24px 8px 30px 10px; }
+
+.tweet-card:hover {
+  transform: translateY(-3px) rotate(0.3deg);
+  box-shadow: var(--shadow-hover);
+}
+
+.tweet-card:nth-child(even):hover { transform: translateY(-3px) rotate(-0.3deg); }
+
+/* Colored top-edge tape for odd cards */
+.tweet-card:nth-child(3n+1)::before {
+  content: ""; position: absolute; top: -8px; left: 30%; right: 30%; height: 6px;
+  background: var(--accent-coral); border-radius: 3px; opacity: 0.6;
+}
+.tweet-card:nth-child(3n+2)::before {
+  content: ""; position: absolute; top: -8px; left: 30%; right: 30%; height: 6px;
+  background: var(--accent-mint); border-radius: 3px; opacity: 0.6;
+}
+
+.tweet-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+.tweet-username { font-family: var(--font-hand); font-size: 22px; font-weight: 600; color: var(--text-primary); }
+.tweet-mood { font-size: 18px; }
+.tweet-time { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--text-tertiary); }
+
+.tweet-body { font-size: 15px; line-height: 1.8; }
+.tweet-body p { margin-bottom: 10px; }
+.tweet-body strong { font-weight: 700; }
+.tweet-body a { color: var(--accent-coral); text-decoration: none; font-weight: 600; border-bottom: 2px dotted var(--accent-coral); }
+.tweet-body a:hover { border-bottom-style: solid; }
+.tweet-body code { font-size: 0.88em; background: rgba(0,0,0,0.04); padding: 2px 8px; border-radius: 9999px; }
+.tweet-body pre { background: var(--bg-page); border-radius: 12px; padding: 16px 20px; margin: 12px 0; overflow-x: auto; font-size: 13px; border: 1px solid rgba(0,0,0,0.04); }
+.tweet-body blockquote { border-left: 3px solid var(--accent-lavender); padding: 4px 0 4px 16px; margin: 14px 0; color: var(--text-secondary); }
+.tweet-body img { max-width: 100%; border-radius: 12px; margin: 12px 0; box-shadow: var(--shadow-cut); }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-hand);font-weight:600;margin:20px 0 10px}
+
+.tweet-card-empty { text-align: center; padding: 56px 24px; }
+.tweet-card-empty h2 { font-family: var(--font-hand); font-size: 32px; margin-bottom: 8px; }
+
+.footer { text-align: center; padding: 24px 0 48px; font-family: var(--font-hand); font-size: 16px; color: var(--text-tertiary); }
+
+@media(max-width:640px){.app{padding:0 16px}.hero{padding:36px 0 28px}.hero-username{font-size:30px}.tweet-card{padding:22px 20px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}}
