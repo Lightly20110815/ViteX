@@ -1,0 +1,129 @@
+/* ===== Variant 18 — Zen (禅境) =====
+   Ultimate minimal · Breath · Empty space · Stillness
+   Typography: Cormorant Garamond + Karla
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Karla:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+:root {
+  --font-display: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
+  --font-body: "Karla", "Noto Sans SC", system-ui, sans-serif;
+  --bg-stone: #F8F6F2;
+  --text-primary: #26221C;
+  --text-secondary: #8C8478;
+  --text-tertiary: #C4BCB0;
+  --accent-sand: #C4A882;
+  --border-stone: #E8E4DC;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text-primary);
+  background: var(--bg-stone);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app { max-width: 560px; margin: 0 auto; padding: 0 40px; }
+
+.hero { padding: 80px 0 64px; text-align: center; }
+
+.hero-avatar-wrap { margin-bottom: 32px; }
+
+.hero-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(20%);
+}
+
+.hero-avatar-fallback {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--text-primary);
+  color: var(--bg-stone);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 24px;
+  margin: 0 auto;
+}
+
+.hero-username {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+
+.hero-bio {
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  max-width: 360px;
+  margin-left: auto; margin-right: auto;
+  line-height: 2;
+}
+
+/* Timeline with extreme whitespace */
+.timeline { display: flex; flex-direction: column; gap: 64px; padding-bottom: 80px; }
+
+.tweet-card {
+  padding: 0;
+  border: none;
+}
+
+/* Minimal border between cards */
+.tweet-card + .tweet-card { border-top: 1px solid var(--border-stone); padding-top: 48px; }
+
+.tweet-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px; }
+
+.tweet-username {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+}
+
+.tweet-mood { font-size: 16px; }
+
+.tweet-time {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.tweet-body {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.9;
+  font-weight: 400;
+}
+
+.tweet-body p { margin-bottom: 20px; }
+.tweet-body p:last-child { margin-bottom: 0; }
+.tweet-body strong { font-weight: 600; }
+.tweet-body em { font-style: italic; color: var(--text-secondary); }
+.tweet-body a { color: var(--accent-sand); text-decoration: none; border-bottom: 1px solid var(--accent-sand); }
+.tweet-body a:hover { color: var(--text-primary); border-bottom-color: var(--text-primary); }
+.tweet-body code { font-size: 0.85em; color: var(--text-secondary); }
+.tweet-body pre { padding: 24px 0; margin: 16px 0; overflow-x: auto; font-size: 14px; color: var(--text-secondary); border-top: 1px solid var(--border-stone); border-bottom: 1px solid var(--border-stone); }
+.tweet-body blockquote { padding: 16px 24px; margin: 24px 0; color: var(--text-secondary); font-style: italic; text-align: center; }
+.tweet-body img { max-width: 100%; margin: 20px 0; }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-display);font-weight:400;margin:32px 0 16px}
+
+.tweet-card-empty { text-align: center; padding: 80px 0; }
+.tweet-card-empty h2 { font-family: var(--font-display); font-size: 22px; font-weight: 400; font-style: italic; margin-bottom: 12px; }
+
+.footer { text-align: center; padding: 32px 0 72px; font-family: var(--font-display); font-size: 14px; font-style: italic; color: var(--text-tertiary); }
+
+@media(max-width:640px){.app{padding:0 24px}.hero{padding:56px 0 40px}.timeline{gap:48px}.tweet-body{font-size:16px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:0.01ms!important}}
