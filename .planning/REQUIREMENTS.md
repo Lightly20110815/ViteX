@@ -1,7 +1,7 @@
 # Requirements: ViteX
 
 **Defined:** 2026-05-02
-**Core Value:** Write posts in Markdown and see them rendered in a beautiful Twitter-style timeline — create file, git push, live.
+**Core Value:** Write posts in Markdown and see them rendered in a beautiful Twitter-style timeline -- create file, git push, live.
 
 ## v1 Requirements
 
@@ -57,7 +57,7 @@ Deferred to future release. Tracked but not in current roadmap.
 ### Content Workflow
 
 - **CREA-04**: Pre-commit git hook validates YAML frontmatter in all tweet files
-- **CREA-05**: Watch mode — script detects new/modified files and auto-rebuilds
+- **CREA-05**: Watch mode -- script detects new/modified files and auto-rebuilds
 
 ## Out of Scope
 
@@ -105,4 +105,4 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ---
 *Requirements defined: 2026-05-02*
-*Last updated: 2026-05-02 after initial definition*
+*Last updated: 2026-05-02 after roadmap creation*
