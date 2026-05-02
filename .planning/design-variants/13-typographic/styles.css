@@ -1,0 +1,154 @@
+/* ===== Variant 13 — Typographic (活字印刷) =====
+   Chinese-first typography · Vertical rhythm · Classical
+   Typography: Noto Serif SC + Ma Shan Zheng
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  --font-display: "Ma Shan Zheng", "ZCOOL XiaoWei", "Noto Serif SC", cursive;
+  --font-body: "Noto Serif SC", "Noto Sans SC", Georgia, "Songti SC", serif;
+  --bg-paper: #FDFBF7;
+  --bg-card: #FEFDFB;
+  --text-primary: #1A1410;
+  --text-secondary: #6B5E53;
+  --text-tertiary: #A89880;
+  --accent-vermillion: #C23B22;
+  --accent-ink: #2C2416;
+  --border-paper: rgba(107,94,83,0.1);
+  --shadow-subtle: 0 1px 3px rgba(0,0,0,0.04);
+  --line-height-cn: 1.85;
+}
+
+:root[data-theme="dark"] {
+  --bg-paper: #141210;
+  --bg-card: #1C1814;
+  --text-primary: #E8E0D5;
+  --text-secondary: #9E9080;
+  --text-tertiary: #6E6050;
+  --accent-vermillion: #E0553B;
+  --border-paper: rgba(158,144,128,0.1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: var(--line-height-cn);
+  color: var(--text-primary);
+  background: var(--bg-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app { max-width: 680px; margin: 0 auto; padding: 0 32px; }
+
+/* Hero with Chinese calligraphy feel */
+.hero {
+  padding: 56px 0 44px;
+  text-align: center;
+  border-bottom: 2px solid var(--accent-ink);
+  margin-bottom: 40px;
+}
+
+.hero-avatar-wrap {
+  display: inline-block;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Seal/stamp style avatar */
+.hero-avatar {
+  width: 72px; height: 72px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 3px solid var(--accent-ink);
+  box-shadow: 4px 4px 0 var(--accent-vermillion);
+}
+
+.hero-avatar-fallback {
+  width: 72px; height: 72px; border-radius: 4px;
+  background: var(--accent-vermillion);
+  color: #FDFBF7; font-family: var(--font-display);
+  font-size: 36px; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto; border: 3px solid var(--accent-ink);
+  box-shadow: 4px 4px 0 var(--accent-ink);
+}
+
+.hero-username {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 400;
+  color: var(--accent-ink);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.hero-bio {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  max-width: 460px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.9;
+}
+
+/* Timeline */
+.timeline { display: flex; flex-direction: column; gap: 28px; padding-bottom: 48px; }
+
+.tweet-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-paper);
+  border-radius: 2px;
+  box-shadow: var(--shadow-subtle);
+  padding: 28px 32px;
+  transition: border-color 0.2s ease;
+  position: relative;
+}
+
+/* Vertical red margin line (like traditional Chinese manuscript paper) */
+.tweet-card::before {
+  content: "";
+  position: absolute;
+  left: 28px; top: 28px; bottom: 28px;
+  width: 1px;
+  background: rgba(194,59,34,0.15);
+}
+
+.tweet-card:hover { border-color: var(--accent-vermillion); }
+
+.tweet-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px; padding-left: 12px; }
+.tweet-username { font-family: var(--font-display); font-size: 22px; font-weight: 400; color: var(--accent-ink); letter-spacing: 0.06em; }
+.tweet-mood { font-size: 18px; }
+.tweet-time { margin-left: auto; font-family: var(--font-body); font-size: 12px; font-weight: 300; color: var(--text-tertiary); }
+
+.tweet-body { font-size: 16px; line-height: var(--line-height-cn); padding-left: 12px; }
+.tweet-body p { margin-bottom: 14px; text-indent: 2em; }
+.tweet-body p:first-of-type { text-indent: 2em; }
+.tweet-body p:last-child { margin-bottom: 0; }
+.tweet-body strong { font-weight: 700; color: var(--accent-ink); }
+.tweet-body em { font-style: italic; }
+.tweet-body a { color: var(--accent-vermillion); text-decoration: none; border-bottom: 1px solid var(--accent-vermillion); }
+.tweet-body a:hover { opacity: 0.7; }
+.tweet-body code { font-size: 0.9em; background: var(--border-paper); padding: 2px 6px; border-radius: 2px; }
+.tweet-body pre { background: var(--bg-paper); border: 1px solid var(--border-paper); border-radius: 2px; padding: 16px 20px; margin: 14px 0; overflow-x: auto; font-size: 14px; }
+.tweet-body pre code { background: none; padding: 0; }
+.tweet-body blockquote { border-left: 3px solid var(--accent-vermillion); padding: 4px 0 4px 16px; margin: 16px 0; color: var(--text-secondary); }
+.tweet-body img { max-width: 100%; border-radius: 2px; margin: 14px 0; }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-display);font-weight:400;margin:24px 0 14px;color:var(--accent-ink)}
+.tweet-body h1{font-size:1.8em}.tweet-body h2{font-size:1.4em}.tweet-body h3{font-size:1.15em}
+
+/* Em-dash style divider between cards (Chinese typographic convention) */
+.tweet-card + .tweet-card { margin-top: 0; }
+
+.tweet-card-empty { text-align: center; padding: 64px 24px; }
+.tweet-card-empty h2 { font-family: var(--font-display); font-size: 28px; color: var(--accent-ink); margin-bottom: 8px; }
+.tweet-card-empty p { color: var(--text-tertiary); }
+
+.footer { text-align: center; padding: 32px 0 48px; font-size: 12px; color: var(--text-tertiary); letter-spacing: 0.08em; }
+
+@media(max-width:640px){.app{padding:0 16px}.hero-username{font-size:36px}.tweet-card{padding:22px 18px}.tweet-body{font-size:15px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:0.01ms!important;animation-duration:0.01ms!important}}
