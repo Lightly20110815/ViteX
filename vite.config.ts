@@ -16,7 +16,13 @@ function markdownPlugin(): Plugin {
 
         const meta = {
           mood: typeof data.mood === 'string' ? data.mood : '📝',
-          created: typeof data.created === 'string' ? data.created : new Date(0).toISOString(),
+          created: (() => {
+            const c = data.created;
+            if (typeof c === 'string') return c;
+            if (c instanceof Date) return c.toISOString();
+            if (typeof c === 'number') return new Date(c).toISOString();
+            return new Date(0).toISOString();
+          })(),
         };
 
         const html = renderMarkdown(content.trim());

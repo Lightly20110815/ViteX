@@ -3,6 +3,7 @@ import { type ProfileData } from '../data/profile';
 export function renderProfile(data: ProfileData): void {
   const profileEl = document.getElementById('profile');
   if (!profileEl) return;
+  profileEl.innerHTML = '';
 
   // Preload Bing background and reveal it
   const bgLayer = document.querySelector<HTMLDivElement>('.bg-layer');
