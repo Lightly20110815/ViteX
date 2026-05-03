@@ -1,389 +1,201 @@
-/* ==============================================
-   ViteX — Personal Timeline
-   Dark-first · Glassmorphism · Atmospheric
-   ============================================== */
+/* ===== ViteX — Paper Craft · 左固定侧栏 =====
+   Cut-paper shadows · Pastel · Hand-made · Left sidebar
+   Typography: Caveat + Quicksand + Noto Sans SC
+   ========================================== */
 
-/* ----- Reset & Base ----- */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
 :root {
-  --font-sans: "Inter", "Noto Sans SC", system-ui, -apple-system, sans-serif;
-  --font-serif: "Noto Serif JP", "Noto Sans SC", serif;
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-full: 9999px;
-  --transition: 200ms ease;
-  --transition-slow: 500ms ease;
+  --font-hand: "Caveat", cursive;
+  --font-sans: "Quicksand", "Noto Sans SC", system-ui, sans-serif;
+  --bg-page: #FFFDF7;
+  --bg-card: #FFFFFF;
+  --text-primary: #3D3929;
+  --text-secondary: #8C8775;
+  --text-tertiary: #BFB9A5;
+  --accent-coral: #FF6B6B;
+  --accent-mint: #4ECDC4;
+  --accent-lavender: #A78BFA;
+  --shadow-cut: 0 4px 0 rgba(0,0,0,0.06), 0 8px 16px rgba(0,0,0,0.04);
+  --shadow-hover: 0 6px 0 rgba(0,0,0,0.08), 0 12px 24px rgba(0,0,0,0.06);
+  --radius-paper: 6px 30px 8px 24px;
+  --sidebar-w: 220px;
 }
 
-/* ----- Light Mode ----- */
-:root[data-theme="light"] {
-  --bg-deep: #F8F9FB;
-  --bg-surface: #FFFFFF;
-  --glass-bg: rgba(255,255,255,0.82);
-  --glass-border: rgba(0,0,0,0.06);
-  --glass-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
-  --glass-hover: rgba(255,255,255,0.92);
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-tertiary: #94A3B8;
-  --accent: #D97706;
-  --accent-soft: rgba(217,119,6,0.10);
-  --accent-glow: rgba(217,119,6,0.15);
-  --divider: rgba(0,0,0,0.06);
-  --overlay-bg: rgba(248,249,251,0.72);
-}
-
-/* ----- Dark Mode (default) ----- */
 :root[data-theme="dark"] {
-  --bg-deep: #08080A;
-  --bg-surface: #141416;
-  --glass-bg: rgba(22,22,24,0.78);
-  --glass-border: rgba(255,255,255,0.06);
-  --glass-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.4);
-  --glass-hover: rgba(28,28,32,0.88);
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-tertiary: #64748B;
-  --accent: #F59E0B;
-  --accent-soft: rgba(245,158,11,0.10);
-  --accent-glow: rgba(245,158,11,0.12);
-  --divider: rgba(255,255,255,0.05);
-  --overlay-bg: rgba(8,8,10,0.68);
+  --bg-page: #1A1814;
+  --bg-card: #24221E;
+  --text-primary: #E8E4D8;
+  --text-secondary: #9E9888;
+  --text-tertiary: #6E6858;
+  --shadow-cut: 0 4px 0 rgba(0,0,0,0.3), 0 8px 16px rgba(0,0,0,0.2);
+  --shadow-hover: 0 6px 0 rgba(0,0,0,0.4), 0 12px 24px rgba(0,0,0,0.3);
 }
 
-/* ----- Body ----- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
 body {
   font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text-primary);
-  background: var(--bg-deep);
-  min-height: 100vh;
+  background: var(--bg-page);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,107,107,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(78,205,196,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(167,139,250,0.05) 0%, transparent 50%);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ----- Atmospheric Background ----- */
-.bg-layer {
-  position: fixed;
-  inset: -40px;
-  z-index: 0;
-  background-image: url("https://bing.img.run/rand.php");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(48px) saturate(1.4);
-  transform: translateZ(0);
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-.bg-layer.loaded { opacity: 1; }
-
-.bg-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  background: var(--overlay-bg);
-  pointer-events: none;
-}
-
-/* ----- App Container ----- */
+/* ===== Layout: left fixed sidebar + right content ===== */
 .app {
-  position: relative;
-  z-index: 10;
-  max-width: 640px;
+  display: flex;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
+  gap: 40px;
+  min-height: 100vh;
 }
 
-/* ==============================================
-   HERO / PROFILE
-   ============================================== */
-.hero {
-  padding: 48px 0 32px;
+/* ===== LEFT SIDEBAR — fixed ===== */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  position: sticky;
+  top: 48px;
+  align-self: flex-start;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
-.hero-avatar-wrap {
-  display: inline-block;
-  position: relative;
+.sidebar-avatar {
+  width: 88px; height: 88px;
+  border-radius: 40% 60% 55% 45% / 52% 48% 55% 45%;
+  object-fit: cover;
+  box-shadow: var(--shadow-cut);
+  transition: transform 0.3s ease;
   margin-bottom: 16px;
 }
 
-.hero-avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: var(--radius-full);
-  object-fit: cover;
-  border: 2px solid var(--glass-border);
-  box-shadow: 0 0 0 4px var(--bg-deep), 0 0 40px var(--accent-glow);
+.sidebar-avatar:hover { transform: rotate(-2deg) scale(1.05); }
+
+.sidebar-avatar-fallback {
+  width: 88px; height: 88px;
+  border-radius: 40% 60% 55% 45% / 52% 48% 55% 45%;
+  background: linear-gradient(135deg, var(--accent-coral), var(--accent-lavender));
+  color: #FFF; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-hand); font-size: 36px;
+  box-shadow: var(--shadow-cut);
+  margin-bottom: 16px;
 }
 
-.hero-avatar-fallback {
-  width: 96px;
-  height: 96px;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--accent) 0%, #DC2626 100%);
-  color: #FFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.sidebar-username {
+  font-family: var(--font-hand);
   font-size: 36px;
   font-weight: 600;
-  font-family: var(--font-serif);
-  margin: 0 auto;
-  box-shadow: 0 0 0 4px var(--bg-deep), 0 0 40px var(--accent-glow);
-}
-
-.hero-username {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: 0.04em;
-}
-
-.hero-bio {
-  margin-top: 8px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  max-width: 420px;
-  margin-left: auto;
-  margin-right: auto;
-  word-break: break-word;
-}
-
-/* ==============================================
-   TIMELINE
-   ============================================== */
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-bottom: 32px;
-}
-
-/* ----- Tweet Card ----- */
-.tweet-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(1.8);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--glass-shadow);
-  padding: 20px 24px;
-  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
-  animation: cardIn 0.5s ease both;
-  position: relative;
-  overflow: hidden;
-}
-
-.tweet-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--divider) 20%, var(--divider) 50%, var(--divider) 80%, transparent 100%);
-  opacity: 0.5;
-}
-
-/* Light mode card shimmer fix */
-:root[data-theme="light"] .tweet-card::before {
-  background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.04) 20%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.04) 80%, transparent 100%);
-}
-
-.tweet-card:hover {
-  background: var(--glass-hover);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.5);
-  transform: translateY(-1px);
-}
-
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Stagger card entrance */
-.tweet-card:nth-child(1) { animation-delay: 0.05s; }
-.tweet-card:nth-child(2) { animation-delay: 0.10s; }
-.tweet-card:nth-child(3) { animation-delay: 0.15s; }
-.tweet-card:nth-child(4) { animation-delay: 0.20s; }
-.tweet-card:nth-child(5) { animation-delay: 0.25s; }
-
-/* ----- Card Header ----- */
-.tweet-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-
-.tweet-username {
-  font-weight: 600;
-  font-size: 15px;
   color: var(--text-primary);
   letter-spacing: 0.02em;
-}
-
-.tweet-mood {
-  font-size: 16px;
-  line-height: 1;
-}
-
-.tweet-time {
-  margin-left: auto;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--text-tertiary);
-  font-feature-settings: "tnum";
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-/* ----- Card Body (Markdown) ----- */
-.tweet-body {
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--text-primary);
-  word-break: break-word;
-}
-
-.tweet-body p { margin-bottom: 10px; }
-.tweet-body p:last-child { margin-bottom: 0; }
-
-.tweet-body strong { font-weight: 600; color: var(--text-primary); }
-.tweet-body em { font-style: italic; }
-
-.tweet-body del {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.tweet-body a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 500;
-  border-bottom: 1px solid transparent;
-  transition: border-color var(--transition);
-}
-.tweet-body a:hover { border-bottom-color: var(--accent); }
-
-.tweet-body code {
-  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
-  font-size: 0.88em;
-  background: rgba(128,128,128,0.12);
-  border-radius: 4px;
-  padding: 2px 6px;
-}
-
-.tweet-body pre {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid var(--glass-border);
-  border-left: 2px solid var(--accent);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  margin: 12px 0;
-  overflow-x: auto;
-  font-size: 13px;
-  line-height: 1.65;
-}
-.tweet-body pre code {
-  background: none;
-  padding: 0;
-  font-size: inherit;
-}
-
-.tweet-body blockquote {
-  border-left: 2px solid var(--accent);
-  padding: 4px 0 4px 14px;
-  margin: 12px 0;
-  color: var(--text-secondary);
-  font-style: italic;
-}
-
-.tweet-body img {
-  max-width: 100%;
-  border-radius: var(--radius-sm);
-  margin: 10px 0;
-  cursor: pointer;
-  transition: transform var(--transition);
-}
-.tweet-body img:hover { transform: scale(1.01); }
-
-.tweet-body ul, .tweet-body ol {
-  padding-left: 1.5em;
-  margin-bottom: 10px;
-}
-.tweet-body li { margin-bottom: 4px; }
-
-.tweet-body h1, .tweet-body h2, .tweet-body h3,
-.tweet-body h4, .tweet-body h5, .tweet-body h6 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 18px 0 8px;
-  letter-spacing: 0.01em;
-}
-.tweet-body h1 { font-size: 1.5em; }
-.tweet-body h2 { font-size: 1.3em; }
-.tweet-body h3 { font-size: 1.15em; }
-
-/* ----- Empty State ----- */
-.tweet-card-empty {
-  text-align: center;
-  padding: 48px 24px;
-}
-
-.tweet-card-empty h2 {
-  font-family: var(--font-serif);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
-.tweet-card-empty p {
-  font-size: 14px;
-  color: var(--text-tertiary);
+.sidebar-bio {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  word-break: break-word;
 }
 
-/* ==============================================
-   FOOTER
-   ============================================== */
-.footer {
-  text-align: center;
-  padding: 24px 0 40px;
-  font-size: 12px;
-  color: var(--text-tertiary);
-  letter-spacing: 0.04em;
+/* Colored tape decoration on sidebar */
+.sidebar::after {
+  content: "";
+  width: 50px; height: 6px;
+  background: var(--accent-coral);
+  border-radius: 3px;
+  opacity: 0.5;
+  margin-top: 20px;
 }
 
-/* ==============================================
-   RESPONSIVE
-   ============================================== */
-@media (max-width: 640px) {
-  .app { padding: 0 12px; }
-  .hero { padding: 32px 0 24px; }
-  .hero-avatar, .hero-avatar-fallback { width: 72px; height: 72px; }
-  .hero-avatar-fallback { font-size: 28px; }
-  .hero-username { font-size: 22px; }
-  .hero-bio { font-size: 13px; }
-  .tweet-card { padding: 16px 18px; border-radius: var(--radius-sm); }
-  .tweet-body { font-size: 14px; }
+/* ===== RIGHT CONTENT ===== */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 40px 0;
 }
 
-/* ==============================================
-   REDUCED MOTION
-   ============================================== */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+/* ===== Timeline ===== */
+.timeline { display: flex; flex-direction: column; gap: 32px; padding-bottom: 48px; }
+
+.tweet-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-cut);
+  padding: 28px 32px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tweet-card:nth-child(even) { border-radius: 24px 8px 30px 10px; }
+
+.tweet-card:hover {
+  transform: translateY(-3px) rotate(0.3deg);
+  box-shadow: var(--shadow-hover);
+}
+
+.tweet-card:nth-child(even):hover { transform: translateY(-3px) rotate(-0.3deg); }
+
+/* Color tape accents */
+.tweet-card:nth-child(3n+1)::before {
+  content: ""; position: absolute; top: -8px; left: 30%; right: 30%; height: 6px;
+  background: var(--accent-coral); border-radius: 3px; opacity: 0.6;
+}
+.tweet-card:nth-child(3n+2)::before {
+  content: ""; position: absolute; top: -8px; left: 30%; right: 30%; height: 6px;
+  background: var(--accent-mint); border-radius: 3px; opacity: 0.6;
+}
+
+.tweet-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+.tweet-username { font-family: var(--font-hand); font-size: 22px; font-weight: 600; color: var(--text-primary); }
+.tweet-mood { font-size: 18px; }
+.tweet-time { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--text-tertiary); }
+
+.tweet-body { font-size: 15px; line-height: 1.8; }
+.tweet-body p { margin-bottom: 10px; }
+.tweet-body strong { font-weight: 700; }
+.tweet-body a { color: var(--accent-coral); text-decoration: none; font-weight: 600; border-bottom: 2px dotted var(--accent-coral); }
+.tweet-body a:hover { border-bottom-style: solid; }
+.tweet-body code { font-size: 0.88em; background: rgba(0,0,0,0.04); padding: 2px 8px; border-radius: 9999px; }
+.tweet-body pre { background: var(--bg-page); border-radius: 12px; padding: 16px 20px; margin: 12px 0; overflow-x: auto; font-size: 13px; border: 1px solid rgba(0,0,0,0.04); }
+.tweet-body pre code { background: none; padding: 0; font-size: inherit; }
+.tweet-body blockquote { border-left: 3px solid var(--accent-lavender); padding: 4px 0 4px 16px; margin: 14px 0; color: var(--text-secondary); }
+.tweet-body img { max-width: 100%; border-radius: 12px; margin: 12px 0; box-shadow: var(--shadow-cut); }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-hand);font-weight:600;margin:20px 0 10px}
+.tweet-body ul,.tweet-body ol { padding-left: 1.5em; }
+.tweet-body li { margin-bottom: 4px; }
+
+.tweet-card-empty { text-align: center; padding: 56px 24px; }
+.tweet-card-empty h2 { font-family: var(--font-hand); font-size: 32px; margin-bottom: 8px; }
+.tweet-card-empty p { color: var(--text-tertiary); }
+
+.footer { text-align: center; padding: 24px 0 48px; font-family: var(--font-hand); font-size: 16px; color: var(--text-tertiary); }
+
+/* ===== Responsive: stack on mobile ===== */
+@media(max-width:700px){
+  .app { flex-direction: column; padding: 0 16px; gap: 0; }
+  .sidebar {
+    position: static; width: 100%; padding: 32px 0 16px;
+    flex-direction: column; align-items: center;
   }
-  .bg-layer { transition: none; }
+  .sidebar-avatar, .sidebar-avatar-fallback { width: 64px; height: 64px; }
+  .sidebar-avatar-fallback { font-size: 28px; }
+  .sidebar-username { font-size: 28px; }
+  .sidebar-bio { max-width: 320px; }
+  .main-content { padding: 16px 0; }
+  .tweet-card { padding: 22px 20px; }
 }
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}}

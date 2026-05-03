@@ -1,53 +1,39 @@
 import { type ProfileData } from '../data/profile';
 
 export function renderProfile(data: ProfileData): void {
-  const profileEl = document.getElementById('profile');
-  if (!profileEl) return;
-  profileEl.innerHTML = '';
-
-  // Preload Bing background and reveal it
-  const bgLayer = document.querySelector<HTMLDivElement>('.bg-layer');
-  if (bgLayer) {
-    const preloader = new Image();
-    preloader.src = data.backgroundUrl;
-    preloader.onload = () => bgLayer.classList.add('loaded');
-    preloader.onerror = () => bgLayer.classList.add('loaded'); // Show even on error
-  }
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+  sidebar.innerHTML = '';
 
   // Avatar with fallback
-  const avatarWrap = document.createElement('div');
-  avatarWrap.className = 'hero-avatar-wrap';
-
   const avatar = document.createElement('img');
   avatar.src = data.avatarUrl;
   avatar.alt = "Sy's avatar";
-  avatar.className = 'hero-avatar';
-  avatar.width = 96;
-  avatar.height = 96;
+  avatar.className = 'sidebar-avatar';
+  avatar.width = 88;
+  avatar.height = 88;
   avatar.loading = 'eager';
   avatar.decoding = 'async';
 
   avatar.onerror = () => {
     const fallback = document.createElement('div');
-    fallback.className = 'hero-avatar-fallback';
+    fallback.className = 'sidebar-avatar-fallback';
     fallback.textContent = 'Sy';
     fallback.setAttribute('aria-label', "Sy's avatar (initial)");
     avatar.replaceWith(fallback);
   };
 
-  avatarWrap.appendChild(avatar);
-
   // Username
   const username = document.createElement('h1');
-  username.className = 'hero-username';
+  username.className = 'sidebar-username';
   username.textContent = data.username;
 
   // Bio
   const bio = document.createElement('p');
-  bio.className = 'hero-bio';
+  bio.className = 'sidebar-bio';
   bio.textContent = data.bio;
 
-  profileEl.appendChild(avatarWrap);
-  profileEl.appendChild(username);
-  profileEl.appendChild(bio);
+  sidebar.appendChild(avatar);
+  sidebar.appendChild(username);
+  sidebar.appendChild(bio);
 }
