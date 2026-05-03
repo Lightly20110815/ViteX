@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>16-gradient-wave — ViteX Demo</title>
+<style>
+/* ===== Variant 16 — Gradient Wave (渐变浪潮) =====
+   Dynamic gradients · Smooth transitions · Modern
+   Typography: Sora + Manrope
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  --font-display: "Sora", system-ui, sans-serif;
+  --font-body: "Manrope", "Noto Sans SC", system-ui, sans-serif;
+  --bg-light: #FBFAF8;
+  --text-dark: #1A1A2E;
+  --text-mid: #6B6B80;
+  --text-dim: #A0A0B0;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-dark);
+  background: var(--bg-light);
+  background-image:
+    radial-gradient(ellipse 800px 400px at 0% 0%, rgba(236,72,153,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 500px at 100% 50%, rgba(59,130,246,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 700px 400px at 50% 100%, rgba(168,85,247,0.05) 0%, transparent 70%);
+  min-height: 100vh;
+}
+
+.app { max-width: 640px; margin: 0 auto; padding: 0 24px; position: relative; }
+
+.hero { padding: 60px 0 40px; text-align: center; }
+.hero-avatar-wrap { display: inline-block; margin-bottom: 20px; }
+.hero-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; background: linear-gradient(white,white) padding-box, linear-gradient(135deg,#EC4899,#3B82F6,#A855F7) border-box; }
+.hero-avatar-fallback { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg,#EC4899,#3B82F6,#A855F7); color:#FFF; display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:28px;font-weight:700;margin:0 auto; }
+.hero-username { font-family: var(--font-display); font-size: 36px; font-weight: 700; letter-spacing: -0.03em; margin: 8px 0; }
+.hero-bio { font-size: 14px; color: var(--text-mid); max-width: 400px; margin: 0 auto; }
+
+.timeline { display: flex; flex-direction: column; gap: 20px; padding-bottom: 48px; }
+
+.tweet-card {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,0,0,0.04);
+  border-radius: 20px;
+  padding: 28px 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.tweet-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+.tweet-card:nth-child(3n+1) { border-left: 3px solid #EC4899; }
+.tweet-card:nth-child(3n+2) { border-left: 3px solid #3B82F6; }
+.tweet-card:nth-child(3n+3) { border-left: 3px solid #A855F7; }
+
+.tweet-header { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+.tweet-username { font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+.tweet-mood { font-size: 16px; }
+.tweet-time { margin-left: auto; font-size: 11px; color: var(--text-dim); font-weight: 500; }
+
+.tweet-body { font-size: 15px; line-height: 1.8; }
+.tweet-body p { margin-bottom: 10px; }
+.tweet-body strong { font-weight: 700; }
+.tweet-body a { color: #3B82F6; text-decoration: none; font-weight: 500; }
+.tweet-body a:hover { text-decoration: underline; }
+.tweet-body code { font-size: 0.88em; background: rgba(0,0,0,0.04); padding: 2px 6px; border-radius: 4px; }
+.tweet-body pre { background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; padding: 14px 18px; margin: 12px 0; overflow-x: auto; }
+.tweet-body blockquote { border-left: 2px solid #A855F7; padding-left: 14px; margin: 14px 0; color: var(--text-mid); }
+.tweet-body img { max-width: 100%; border-radius: 12px; margin: 10px 0; }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-display);font-weight:600;margin:20px 0 10px}
+
+.tweet-card-empty { text-align: center; padding: 48px; }
+.tweet-card-empty h2 { font-family: var(--font-display); font-size: 24px; margin-bottom: 8px; }
+
+.footer { text-align: center; padding: 24px 0 48px; font-size: 12px; color: var(--text-dim); }
+
+@media(max-width:640px){.app{padding:0 16px}.tweet-card{padding:20px 22px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:0.01ms!important;animation-duration:0.01ms!important}}
+</style>
+</head>
+<body>
+<main class="app"><header id="profile" class="hero"></header><div id="timeline" class="timeline"></div><footer id="footer" class="footer"></footer></main>
+<script type="module" src="/src/main-variant.ts"></script>
+</body>
+</html>

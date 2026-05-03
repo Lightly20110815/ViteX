@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>15-magazine — ViteX Demo</title>
+<style>
+/* ===== Variant 15 — Editorial Magazine (杂志排版) =====
+   Magazine · Hero image · Pull quotes · Columns
+   Typography: Playfair Display + Lato + Crimson Text
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  --font-headline: "Playfair Display", Georgia, serif;
+  --font-body: "Lato", "Noto Sans SC", system-ui, sans-serif;
+  --font-accent: "Crimson Text", Georgia, serif;
+  --bg-page: #FFFDFA;
+  --bg-card: #FFFFFF;
+  --text-primary: #1A1814;
+  --text-secondary: #5C5850;
+  --text-tertiary: #A09A90;
+  --accent-red: #C41E3A;
+  --accent-gold: #B8960A;
+  --accent-navy: #1B2A4A;
+  --border: #E8E4DD;
+}
+
+:root[data-theme="dark"] {
+  --bg-page: #12100E;
+  --bg-card: #1C1A16;
+  --text-primary: #EDE8E0;
+  --text-secondary: #A09888;
+  --text-tertiary: #6E6858;
+  --accent-red: #E8405A;
+  --accent-gold: #D4AF37;
+  --accent-navy: #4A6FA5;
+  --border: #2A2620;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Magazine-style thin border frame */
+body::before {
+  content: ""; position: fixed; inset: 12px; z-index: 999; pointer-events: none;
+  border: 1px solid var(--border);
+}
+
+.app { max-width: 780px; margin: 0 auto; padding: 48px 48px 0; position: relative; z-index: 10; }
+
+/* Hero as magazine cover */
+.hero {
+  text-align: center;
+  padding: 24px 0 48px;
+  margin-bottom: 40px;
+  border-bottom: 3px double var(--border);
+}
+
+.hero-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--accent-red);
+  margin-bottom: 16px;
+}
+
+.hero-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-page); box-shadow: 0 0 0 1px var(--border); }
+.hero-avatar-fallback { width: 100px; height: 100px; border-radius: 50%; background: var(--accent-navy); color: #FFF; display: flex; align-items: center; justify-content: center; font-family: var(--font-headline); font-size: 36px; margin: 0 auto; }
+
+.hero-username {
+  font-family: var(--font-headline);
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-top: 20px;
+  line-height: 1.1;
+}
+
+.hero-bio {
+  margin-top: 12px;
+  font-family: var(--font-accent);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin-left: auto; margin-right: auto;
+}
+
+/* Timeline with magazine layout */
+.timeline { display: flex; flex-direction: column; gap: 48px; padding-bottom: 48px; }
+
+.tweet-card { padding: 0; }
+
+/* Magazine article header */
+.tweet-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tweet-username {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-navy);
+  letter-spacing: 0.02em;
+}
+
+.tweet-mood { font-size: 18px; }
+
+.tweet-time {
+  margin-left: auto;
+  font-family: var(--font-accent);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+/* Magazine body — larger, more spacing, drop caps */
+.tweet-body {
+  font-family: var(--font-accent);
+  font-size: 18px;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+
+.tweet-body p { margin-bottom: 16px; }
+.tweet-body p:last-child { margin-bottom: 0; }
+
+/* Drop cap on first paragraph */
+.tweet-body p:first-of-type::first-letter {
+  font-family: var(--font-headline);
+  font-size: 4em;
+  font-weight: 900;
+  float: left;
+  line-height: 0.75;
+  padding-right: 12px;
+  padding-top: 6px;
+  color: var(--accent-red);
+}
+
+.tweet-body strong { font-weight: 700; color: var(--accent-navy); }
+.tweet-body em { font-style: italic; }
+.tweet-body a { color: var(--accent-red); text-decoration: none; border-bottom: 1px dotted var(--accent-gold); }
+.tweet-body a:hover { border-bottom-style: solid; color: var(--accent-gold); }
+.tweet-body code { font-size: 0.85em; background: var(--border); padding: 2px 6px; border-radius: 3px; }
+.tweet-body pre { background: var(--bg-card); border: 1px solid var(--border); padding: 18px 24px; margin: 18px 0; overflow-x: auto; font-size: 14px; }
+.tweet-body pre code { background: none; padding: 0; }
+
+/* Pull quote style for blockquote */
+.tweet-body blockquote {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--accent-navy);
+  border: none;
+  padding: 24px 32px;
+  margin: 28px 0;
+  text-align: center;
+  position: relative;
+}
+.tweet-body blockquote::before { content: "\201C"; font-size: 72px; color: var(--accent-gold); position: absolute; left: 0; top: -10px; font-family: var(--font-headline); line-height: 1; opacity: 0.5; }
+.tweet-body blockquote::after { content: "\201D"; font-size: 72px; color: var(--accent-gold); position: absolute; right: 0; bottom: -40px; font-family: var(--font-headline); line-height: 1; opacity: 0.5; }
+
+.tweet-body img { max-width: 100%; margin: 20px 0; }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{font-family:var(--font-headline);font-weight:700;margin:28px 0 14px;color:var(--accent-navy)}
+
+/* Section divider between cards */
+.tweet-card + .tweet-card::before {
+  content: "✦";
+  display: block;
+  text-align: center;
+  color: var(--accent-gold);
+  font-size: 12px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.tweet-card-empty { text-align: center; padding: 80px 0; }
+.tweet-card-empty h2 { font-family: var(--font-headline); font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+
+.footer { text-align: center; padding: 24px 0 48px; font-family: var(--font-accent); font-style: italic; font-size: 13px; color: var(--text-tertiary); }
+
+@media(max-width:768px){.app{padding:32px 20px 0}.hero-username{font-size:38px}.tweet-body{font-size:16px}.tweet-body blockquote{font-size:20px;padding:16px 20px}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:0.01ms!important;animation-duration:0.01ms!important}}
+</style>
+</head>
+<body>
+<main class="app"><header id="profile" class="hero"></header><div id="timeline" class="timeline"></div><footer id="footer" class="footer"></footer></main>
+<script type="module" src="/src/main-variant.ts"></script>
+</body>
+</html>

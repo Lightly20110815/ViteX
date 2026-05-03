@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>01-neon-noir — ViteX Demo</title>
+<style>
+/* ==============================================
+   Variant 1 — Neon Noir (暗夜霓虹)
+   Dark-only · Retro-futuristic minimal · Neon accents
+   Typography: Space Grotesk + Noto Sans SC
+   Palette: Deep navy + Purple neon + Cyan
+   ============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ----- Design Tokens ----- */
+:root {
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Noto Sans SC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --bg-deep: #06060E;
+  --bg-elevated: #0C0C1A;
+  --bg-card: rgba(12, 12, 26, 0.75);
+  --card-border: rgba(124, 58, 237, 0.15);
+  --card-border-hover: rgba(124, 58, 237, 0.4);
+  --text-primary: #EDE9FE;
+  --text-secondary: #A5B4FC;
+  --text-tertiary: #6366F1;
+  --accent-purple: #7C3AED;
+  --accent-cyan: #06B6D4;
+  --accent-glow-purple: rgba(124, 58, 237, 0.35);
+  --accent-glow-cyan: rgba(6, 182, 212, 0.25);
+  --divider: rgba(99, 102, 241, 0.1);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Reset ----- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--bg-deep);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----- Atmospheric Background ----- */
+.bg-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-gradient-1 {
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 80%;
+  height: 120%;
+  background: radial-gradient(ellipse at center, rgba(124,58,237,0.08) 0%, transparent 70%);
+  animation: floatPurple 20s ease-in-out infinite;
+}
+
+.bg-gradient-2 {
+  position: absolute;
+  bottom: -30%;
+  right: -10%;
+  width: 60%;
+  height: 80%;
+  background: radial-gradient(ellipse at center, rgba(6,182,212,0.06) 0%, transparent 70%);
+  animation: floatCyan 25s ease-in-out infinite;
+}
+
+.bg-image {
+  position: absolute;
+  inset: -40px;
+  background-image: url("https://bing.img.run/rand.php");
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px) saturate(0.6) brightness(0.3);
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+.bg-image.loaded { opacity: 1; }
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+@keyframes floatPurple {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(30px, -20px) rotate(3deg); }
+  66% { transform: translate(-20px, 10px) rotate(-2deg); }
+}
+
+@keyframes floatCyan {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-20px, -30px) rotate(-3deg); }
+}
+
+/* ----- App Layout ----- */
+.app {
+  position: relative;
+  z-index: 10;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ----- Hero ----- */
+.hero {
+  padding: 56px 0 40px;
+  text-align: center;
+}
+
+.hero-avatar-wrap {
+  display: inline-block;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.hero-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--card-border);
+  box-shadow:
+    0 0 20px var(--accent-glow-purple),
+    0 0 60px rgba(124, 58, 237, 0.15);
+}
+
+.hero-avatar-fallback {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-purple) 0%, #4C1D95 100%);
+  color: #EDE9FE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0 auto;
+  box-shadow: 0 0 20px var(--accent-glow-purple), 0 0 60px rgba(124,58,237,0.15);
+}
+
+.hero-username {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  text-shadow: 0 0 30px rgba(237,233,254,0.3);
+}
+
+.hero-bio {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ----- Timeline ----- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 40px;
+}
+
+/* ----- Tweet Card ----- */
+.tweet-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 22px 28px;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+  animation: cardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  position: relative;
+}
+
+.tweet-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, transparent 60%, rgba(124,58,237,0.08) 100%);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.tweet-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow:
+    0 0 20px var(--accent-glow-purple),
+    0 4px 24px rgba(0,0,0,0.5);
+  transform: translateY(-2px);
+}
+
+.tweet-card:hover::before { opacity: 1; }
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tweet-card:nth-child(1) { animation-delay: 0.00s; }
+.tweet-card:nth-child(2) { animation-delay: 0.08s; }
+.tweet-card:nth-child(3) { animation-delay: 0.16s; }
+.tweet-card:nth-child(4) { animation-delay: 0.24s; }
+.tweet-card:nth-child(5) { animation-delay: 0.32s; }
+.tweet-card:nth-child(6) { animation-delay: 0.40s; }
+.tweet-card:nth-child(7) { animation-delay: 0.48s; }
+.tweet-card:nth-child(8) { animation-delay: 0.56s; }
+
+/* Card Header */
+.tweet-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tweet-username {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.tweet-mood {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.tweet-time {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+/* Card Body */
+.tweet-body {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.tweet-body p { margin-bottom: 12px; }
+.tweet-body p:last-child { margin-bottom: 0; }
+.tweet-body strong { font-weight: 600; color: #F5F3FF; }
+.tweet-body em { font-style: italic; color: var(--text-secondary); }
+.tweet-body del { text-decoration: line-through; opacity: 0.5; }
+
+.tweet-body a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 500;
+  background: linear-gradient(to right, var(--accent-cyan), var(--accent-cyan));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+  padding-bottom: 1px;
+}
+.tweet-body a:hover { background-size: 100% 1px; }
+
+.tweet-body code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: rgba(99,102,241,0.15);
+  color: #C7D2FE;
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+
+.tweet-body pre {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-left: 2px solid var(--accent-purple);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin: 14px 0;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.tweet-body pre code { background: none; padding: 0; font-size: inherit; }
+
+.tweet-body blockquote {
+  border-left: 2px solid var(--accent-purple);
+  padding: 6px 0 6px 16px;
+  margin: 14px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.tweet-body img {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+  margin: 12px 0;
+}
+
+.tweet-body ul, .tweet-body ol { padding-left: 1.5em; margin-bottom: 12px; }
+.tweet-body li { margin-bottom: 6px; }
+.tweet-body li::marker { color: var(--accent-purple); }
+
+.tweet-body h1, .tweet-body h2, .tweet-body h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 20px 0 10px;
+  color: #F5F3FF;
+}
+.tweet-body h1 { font-size: 1.5em; }
+.tweet-body h2 { font-size: 1.25em; }
+.tweet-body h3 { font-size: 1.1em; }
+
+/* Empty State */
+.tweet-card-empty {
+  text-align: center;
+  padding: 56px 24px;
+}
+.tweet-card-empty h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.tweet-card-empty p { color: var(--text-tertiary); font-size: 14px; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 24px 0 48px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.08em;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .app { padding: 0 16px; }
+  .hero { padding: 40px 0 28px; }
+  .hero-username { font-size: 26px; }
+  .tweet-card { padding: 16px 20px; border-radius: var(--radius-md); }
+  .tweet-body { font-size: 14px; }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="bg-container" aria-hidden="true">
+    <div class="bg-gradient-1"></div>
+    <div class="bg-gradient-2"></div>
+    <div class="bg-image"></div>
+    <div class="bg-grid"></div>
+  </div>
+  <main class="app">
+    <header id="profile" class="hero"></header>
+    <div id="timeline" class="timeline"></div>
+    <footer id="footer" class="footer"></footer>
+  </main>
+  <script type="module" src="/src/main.ts"></script>
+<script type="module" src="/src/main-variant.ts"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>11-terminal — ViteX Demo</title>
+<style>
+/* ===== Variant 11 — Terminal Journal (终端日志) =====
+   Green-on-black · ASCII · Hacker journal · Raw
+   Typography: IBM Plex Mono
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+:root {
+  --font-mono: "IBM Plex Mono", "Noto Sans SC", monospace;
+  --bg: #0C0D0C;
+  --text: #3EEF3E;
+  --text-dim: #1A8C1A;
+  --text-bright: #8FFF8F;
+  --accent: #00FF41;
+  --border: #1A3A1A;
+  --hover-bg: #0F1F0F;
+  --cursor: #00FF41;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.015) 2px, rgba(0,255,65,0.015) 4px);
+  -webkit-font-smoothing: none;
+}
+
+/* Scanline effect */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+}
+
+.app { max-width: 720px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 10; }
+
+/* Terminal prompt style hero */
+.hero {
+  padding: 0 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.hero-prompt {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.hero-prompt::before { content: "sy@vitex:~$ "; color: var(--accent); }
+
+.hero-inner { display: flex; align-items: flex-start; gap: 16px; }
+
+.hero-avatar {
+  width: 48px; height: 48px;
+  border-radius: 2px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  filter: grayscale(100%) brightness(0.9);
+}
+
+.hero-avatar-fallback {
+  width: 48px; height: 48px; border-radius: 2px;
+  background: var(--accent); color: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 18px; font-weight: 700;
+}
+
+.hero-info { display: flex; flex-direction: column; gap: 4px; }
+
+.hero-username { font-size: 16px; font-weight: 600; color: var(--text-bright); }
+.hero-username::before { content: "NAME: "; color: var(--text-dim); font-weight: 400; font-size: 12px; }
+
+.hero-bio { font-size: 12px; color: var(--text-dim); max-width: 500px; }
+.hero-bio::before { content: "BIO: "; color: var(--text-dim); font-weight: 700; }
+
+/* Timeline — each tweet as a log entry */
+.timeline { display: flex; flex-direction: column; gap: 0; padding-bottom: 40px; }
+
+.tweet-card {
+  padding: 16px 0 16px 20px;
+  border-left: 1px solid var(--border);
+  margin-left: 8px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.tweet-card::before {
+  content: ""; position: absolute; left: -4px; top: 20px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.tweet-card:hover { border-left-color: var(--accent); }
+
+/* Log timestamp prefix */
+.tweet-time {
+  font-size: 11px;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tweet-time::before { content: "[log "; }
+.tweet-time::after { content: " ]"; }
+
+.tweet-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+
+.tweet-username { font-weight: 600; font-size: 13px; color: var(--text-bright); }
+.tweet-username::before { content: "@"; }
+
+.tweet-mood::before { content: "mood="; color: var(--text-dim); font-size: 10px; }
+.tweet-mood { font-size: 13px; }
+
+.tweet-body { font-size: 14px; line-height: 1.6; }
+.tweet-body p { margin-bottom: 8px; }
+.tweet-body p:last-child { margin-bottom: 0; }
+.tweet-body strong { font-weight: 700; color: var(--text-bright); }
+.tweet-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.tweet-body code { background: rgba(0,255,65,0.08); padding: 2px 6px; border-radius: 2px; }
+.tweet-body pre { background: rgba(0,0,0,0.5); border: 1px solid var(--border); padding: 12px 16px; margin: 10px 0; overflow-x: auto; font-size: 12px; }
+.tweet-body blockquote { border-left: 2px solid var(--accent); padding: 4px 0 4px 14px; margin: 10px 0; color: var(--text-dim); }
+.tweet-body img { max-width: 100%; border: 1px solid var(--border); margin: 10px 0; }
+.tweet-body h1,.tweet-body h2,.tweet-body h3{color:var(--text-bright);font-weight:700;margin:16px 0 8px}
+
+.tweet-card-empty { border-left-color: var(--accent); padding: 32px 0 32px 20px; }
+.tweet-card-empty h2 { font-size: 16px; color: var(--text-bright); margin-bottom: 8px; }
+.tweet-card-empty h2::before { content: "> "; }
+
+.footer { padding: 24px 0 48px; text-align: center; font-size: 11px; color: var(--text-dim); }
+.footer::before { content: "── "; }
+.footer::after { content: " ──"; }
+
+/* Blinking cursor */
+.blink { animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+@media(max-width:640px){.app{padding:24px 16px}.hero-inner{flex-direction:column}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important}}
+</style>
+</head>
+<body>
+<main class="app"><header id="profile" class="hero"><div class="hero-prompt">cat /home/sy/profile.json</div><div class="hero-inner"><div id="avatar-slot"></div><div class="hero-info"><div id="name-slot"></div><div id="bio-slot"></div></div></div></header><div id="timeline" class="timeline"></div><footer id="footer" class="footer"></footer></main>
+<script type="module" src="/src/main-variant.ts"></script>
+</body>
+</html>
