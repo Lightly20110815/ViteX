@@ -5,6 +5,17 @@ export function renderProfile(data: ProfileData): void {
   if (!sidebar) return;
   sidebar.innerHTML = '';
 
+  // Preload Bing background
+  if (!document.querySelector('.bg-layer.loaded')) {
+    const bgLayer = document.querySelector<HTMLDivElement>('.bg-layer');
+    if (bgLayer) {
+      const preloader = new Image();
+      preloader.src = data.backgroundUrl;
+      preloader.onload = () => bgLayer.classList.add('loaded');
+      preloader.onerror = () => bgLayer.classList.add('loaded');
+    }
+  }
+
   // Avatar with fallback
   const avatar = document.createElement('img');
   avatar.src = data.avatarUrl;

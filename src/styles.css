@@ -48,6 +48,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ===== Bing Background ===== */
+.bg-layer {
+  position: fixed; inset: -40px; z-index: 0;
+  background-image: url("https://bing.img.run/rand.php");
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+  filter: blur(32px) saturate(0.8);
+  transform: translateZ(0);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.bg-layer.loaded { opacity: 1; }
+
+.bg-overlay {
+  position: fixed; inset: 0; z-index: 1;
+  background: rgba(255,253,247,0.82);
+  pointer-events: none;
+}
+:root[data-theme="dark"] .bg-overlay { background: rgba(26,24,20,0.82); }
+
 /* ===== Layout: left fixed sidebar + right content ===== */
 .app {
   display: flex;
