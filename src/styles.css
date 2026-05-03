@@ -62,10 +62,10 @@ body {
 
 .bg-overlay {
   position: fixed; inset: 0; z-index: 1;
-  background: rgba(255,253,247,0.70);
+  background: rgba(255,253,247,0.50);
   pointer-events: none;
 }
-:root[data-theme="dark"] .bg-overlay { background: rgba(26,24,20,0.78); }
+:root[data-theme="dark"] .bg-overlay { background: rgba(26,24,20,0.60); }
 
 /* ===== Layout: left fixed sidebar + right content ===== */
 .app {
