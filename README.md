@@ -1,39 +1,39 @@
 # ViteX
 
-> Personal Twitter-style timeline · Markdown-driven · Pure frontend static site
+> 个人时间线 · Markdown 驱动 · 纯前端静态站点
 
 ![Vite](https://img.shields.io/badge/Vite-8.0-646CFF?logo=vite)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## Demo
+## 在线演示
 
-Visit the live site at **https://vitex-one.vercel.app** (or deploy your own).
+**https://vitex-one.vercel.app**
 
-## Features
+## 功能特性
 
-- **Markdown-driven** — Write tweets as `.md` files, push to Git, timeline updates
-- **Glassmorphism UI** — Apple Frosted Glass style with frosted glass cards and sidebar
-- **Bing Daily Background** — Beautiful wallpaper refreshed daily from Bing
-- **Auto Dark/Light Mode** — Follows your system preference automatically
-- **3D Card Effects** — Interactive hover with perspective transforms and cursor glow
-- **Syntax Highlighting** — Code blocks with highlight.js support
-- **Build-time Rendering** — All tweets pre-rendered at build time via custom Vite plugin
-- **Pure Vanilla TS** — No framework, just TypeScript with DOM factory functions
-- **Responsive** — Works on desktop and mobile
+- **Markdown 驱动** — 写推文就是写 `.md` 文件，推送到 Git，时间线自动更新
+- **毛玻璃 UI** — Apple Frosted Glass 风格，卡片和侧边栏均有磨砂玻璃效果
+- **必应每日壁纸** — 每日更新的精美背景图
+- **自动深色/浅色模式** — 跟随系统偏好自动切换
+- **3D 卡片交互** — 鼠标悬停时卡片带有透视变换和跟随光效
+- **代码高亮** — 支持 highlight.js 代码块语法高亮
+- **构建时渲染** — 自定义 Vite 插件在构建时预渲染所有推文
+- **纯原生 TS** — 无框架，使用 TypeScript DOM 工厂函数
+- **响应式布局** — 适配桌面端和移动端
 
-## Quick Start
+## 快速开始
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
-Visit `http://localhost:5173`.
+访问 `http://localhost:5173`。
 
-## Writing Tweets
+## 撰写推文
 
-Create `.md` files under `content/tweets/YYYY/MM/`:
+在 `content/tweets/YYYY/MM/` 下创建 `.md` 文件：
 
 ```markdown
 ---
@@ -43,80 +43,80 @@ created: 2026-05-02T12:00:00+08:00
 
 # Hello, ViteX!
 
-This is my first tweet. **ViteX** is a Markdown-driven timeline.
+这是我的第一条推文。**ViteX** 是一个 Markdown 驱动的个人时间线。
 
-## Features
+## 功能
 
-- Markdown writing
-- Glassmorphism design
+- Markdown 写作
+- 毛玻璃设计
 
-> Write Markdown, push to Git, timeline goes live.
+> 写 Markdown，推送到 Git，时间线就上线了。
 ```
 
-### Frontmatter Fields
+### Frontmatter 字段
 
-| Field   | Type     | Description           |
-|---------|----------|-----------------------|
-| `mood`  | `string` | Emoji mood (e.g., `😊`) |
-| `created` | `string` | ISO 8601 creation time |
+| 字段      | 类型     | 说明                  |
+|---------|----------|---------------------|
+| `mood`  | `string` | 心情表情（如 `😊`）      |
+| `created` | `string` | ISO 8601 创建时间      |
 
-## Deployment
+## 部署
 
-### Vercel (Recommended)
+### Vercel（推荐）
 
 ```bash
-npm run deploy
+pnpm deploy
 ```
 
-Or connect your GitHub repo to Vercel for automatic deployments on push.
+或连接 GitHub 仓库到 Vercel，每次推送自动部署。
 
-## Architecture
+## 项目结构
 
 ```
 vitex/
-├── content/tweets/     # Tweet Markdown files (YYYY/MM/*.md)
+├── content/tweets/     # 推文 Markdown 文件（YYYY/MM/*.md）
 ├── src/
-│   ├── main.ts        # Entry point, rendering, interactions
+│   ├── main.ts        # 入口函数，渲染与交互逻辑
 │   ├── data/
-│   │   ├── profile.ts  # User profile data
-│   │   └── tweets.ts   # Build-time tweet data
+│   │   ├── profile.ts  # 用户资料数据
+│   │   └── tweets.ts   # 构建时推文数据
 │   ├── components/
-│   │   ├── Profile.ts  # Sidebar profile renderer
-│   │   ├── TweetCard.ts # Tweet card renderer
-│   │   └── Timeline.ts  # Timeline container renderer
+│   │   ├── Profile.ts  # 侧边栏资料渲染器
+│   │   ├── TweetCard.ts # 推文卡片渲染器
+│   │   └── Timeline.ts  # 时间线容器渲染器
 │   ├── utils/
-│   │   ├── marked-config.ts # Markdown parser config
-│   │   └── time.ts      # Time formatting utilities
+│   │   ├── marked-config.ts # Markdown 解析器配置
+│   │   └── time.ts      # 时间格式化工具
 │   ├── types/
 │   │   ├── TweetData.ts
 │   │   └── markdown.d.ts
-│   └── styles.css      # Apple Frosted Glass styles
+│   └── styles.css      # Apple Frosted Glass 样式
 ├── index.html
 ├── package.json
 └── vite.config.ts
 ```
 
-## Tech Stack
+## 技术栈
 
-| Layer         | Choice                          |
-|---------------|---------------------------------|
-| Build Tool    | Vite 8                          |
-| Language      | TypeScript 5.8                  |
-| Markdown      | marked + gray-matter            |
-| Styling       | Pico.css + custom CSS           |
-| Syntax HL     | highlight.js                    |
-| Time Utils    | dayjs                           |
-| Deployment    | Vercel                          |
+| 层级      | 技术选型              |
+|---------|-------------------|
+| 构建工具   | Vite 8            |
+| 开发语言   | TypeScript 5.8    |
+| Markdown | marked + gray-matter |
+| 样式     | Pico.css + 自定义 CSS |
+| 代码高亮   | highlight.js     |
+| 时间处理   | dayjs             |
+| 部署平台   | Vercel            |
 
-## Commands
+## 命令
 
-| Command         | Action                    |
-|-----------------|---------------------------|
-| `npm run dev`   | Start Vite dev server     |
-| `npm run build` | Production build          |
-| `npm run preview` | Preview production build |
-| `npm run deploy` | Build and push to Vercel |
+| 命令              | 操作              |
+|-----------------|-----------------|
+| `pnpm dev`      | 启动 Vite 开发服务器 |
+| `pnpm build`    | 生产环境构建        |
+| `pnpm preview`  | 预览生产构建        |
+| `pnpm deploy`   | 构建并推送到 Vercel  |
 
-## License
+## 开源协议
 
 MIT · © Sy
