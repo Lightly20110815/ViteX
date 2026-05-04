@@ -5,9 +5,13 @@ import { profile } from './data/profile';
 import { renderProfile } from './components/Profile';
 import { renderTimeline } from './components/Timeline';
 import { renderCanvasParticles } from './components/CanvasParticles';
+import { renderCursor } from './components/Cursor';
+import { renderTrailingCursor } from './components/TrailingCursor';
 
 function main(): void {
   renderCanvasParticles();
+  renderCursor();
+  renderTrailingCursor();
   renderProfile(profile);
   renderTimeline(tweets);
   renderFooter();
