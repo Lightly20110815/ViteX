@@ -4,8 +4,10 @@ import { tweets } from './data/tweets';
 import { profile } from './data/profile';
 import { renderProfile } from './components/Profile';
 import { renderTimeline } from './components/Timeline';
+import { renderCanvasParticles } from './components/CanvasParticles';
 
 function main(): void {
+  renderCanvasParticles();
   renderProfile(profile);
   renderTimeline(tweets);
   renderFooter();
