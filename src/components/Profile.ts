@@ -6,45 +6,66 @@ export function renderProfile(data: ProfileData): void {
   sidebar.innerHTML = '';
 
   // Preload Bing background
-  if (!document.querySelector('.bg-layer.loaded')) {
-    const bgLayer = document.querySelector<HTMLDivElement>('.bg-layer');
-    if (bgLayer) {
+  if (!document.querySelector('.bg-blur.loaded')) {
+    const bgBlur = document.querySelector<HTMLDivElement>('.bg-blur');
+    if (bgBlur) {
       const preloader = new Image();
       preloader.src = data.backgroundUrl;
-      preloader.onload = () => bgLayer.classList.add('loaded');
-      preloader.onerror = () => bgLayer.classList.add('loaded');
+      preloader.onload = () => {
+        document.documentElement.style.setProperty('--bg-image', `url(${preloader.src})`);
+        bgBlur.classList.add('loaded');
+      };
+      preloader.onerror = () => bgBlur.classList.add('loaded');
     }
   }
 
   // Avatar with fallback
+  const avatarContainer = document.createElement('div');
+  avatarContainer.className = 'sidebar-avatar-container';
+  
   const avatar = document.createElement('img');
   avatar.src = data.avatarUrl;
-  avatar.alt = "Sy's avatar";
+  avatar.alt = `${data.username}'s avatar`;
   avatar.className = 'sidebar-avatar';
-  avatar.width = 88;
-  avatar.height = 88;
+  avatar.width = 96;
+  avatar.height = 96;
   avatar.loading = 'eager';
   avatar.decoding = 'async';
 
   avatar.onerror = () => {
     const fallback = document.createElement('div');
     fallback.className = 'sidebar-avatar-fallback';
-    fallback.textContent = 'Sy';
-    fallback.setAttribute('aria-label', "Sy's avatar (initial)");
+    fallback.textContent = data.username.substring(0, 2);
+    fallback.setAttribute('aria-label', `${data.username}'s avatar fallback`);
     avatar.replaceWith(fallback);
   };
+  
+  avatarContainer.appendChild(avatar);
 
   // Username
   const username = document.createElement('h1');
   username.className = 'sidebar-username';
   username.textContent = data.username;
 
-  // Bio
-  const bio = document.createElement('p');
-  bio.className = 'sidebar-bio';
-  bio.textContent = data.bio;
+  // Bio with tag support
+  const bioContainer = document.createElement('div');
+  bioContainer.className = 'sidebar-bio-container';
+  
+  const bioParts = data.bio.split(' | ');
+  bioParts.forEach(part => {
+    const p = document.createElement('p');
+    p.className = 'sidebar-bio-part';
+    
+    // Check if it's a tag-like part (short, no spaces)
+    if (part.length < 15 && !part.includes(' ')) {
+      p.classList.add('sidebar-bio-tag');
+    }
+    
+    p.textContent = part;
+    bioContainer.appendChild(p);
+  });
 
-  sidebar.appendChild(avatar);
+  sidebar.appendChild(avatarContainer);
   sidebar.appendChild(username);
-  sidebar.appendChild(bio);
+  sidebar.appendChild(bioContainer);
 }
