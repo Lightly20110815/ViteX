@@ -1,7 +1,10 @@
 import { defineConfig, type Plugin } from 'vite';
-import { resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { resolve, dirname } from 'path';
 import grayMatter from '@11ty/gray-matter';
 import { renderMarkdown } from './src/utils/marked-config';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function markdownPlugin(): Plugin {
   return {
