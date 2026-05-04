@@ -8,7 +8,7 @@
 
 ## 在线演示
 
-**https://vitex-one.vercel.app**
+**https://vite-x.vercel.app**
 
 ## 功能特性
 
