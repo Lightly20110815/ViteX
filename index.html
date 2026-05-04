@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; script-src 'self' 'unsafe-inline'; connect-src 'self';" />
   <title>Sy — Timeline</title>
+  <link rel="alternate" type="application/rss+xml" title="Sy — Timeline" href="/rss.xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <style>html{-webkit-tap-highlight-color:transparent}@media(prefers-color-scheme:dark){html{color-scheme:dark}}@media(prefers-color-scheme:light){html{color-scheme:light}}</style>
@@ -20,10 +21,27 @@
 </head>
 <body>
 <div class="bg-blur" aria-hidden="true"></div>
+<div class="lunar-horizon" aria-hidden="true"></div>
+<div class="orbit-field" aria-hidden="true">
+  <span class="orbit-ring orbit-ring-one"></span>
+  <span class="orbit-ring orbit-ring-two"></span>
+  <span class="orbit-ring orbit-ring-three"></span>
+</div>
 <div class="bg-clear" aria-hidden="true"></div>
+<div class="bg-lens" aria-hidden="true"></div>
+<div class="mission-hud" aria-hidden="true">
+  <span>VITEX / LUNAR LOG</span>
+  <span>PERSONAL TELEMETRY</span>
+</div>
+<div class="scroll-progress" aria-hidden="true"><span></span></div>
+<div class="mission-console" aria-hidden="true">
+  <span class="mission-console-label">ORBIT</span>
+  <span class="mission-console-value">00%</span>
+</div>
 <div class="app">
   <aside class="sidebar" id="sidebar" aria-label="Profile sidebar"></aside>
   <main class="main-content">
+    <section id="insights" class="insights" aria-label="Personal stats"></section>
     <div id="timeline" class="timeline" aria-label="Tweets"></div>
     <footer id="footer" class="footer" role="contentinfo"></footer>
   </main>
