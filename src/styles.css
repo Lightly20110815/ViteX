@@ -468,8 +468,18 @@ body {
 
 .tweet-time {
   margin-left: auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.38);
+  color: var(--text-primary);
   font-size: 13px;
-  color: var(--text-tertiary);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+:root[data-theme="dark"] .tweet-time {
+  background: rgba(255,255,255,0.12);
+  color: var(--text-secondary);
 }
 
 .tweet-body {
@@ -683,20 +693,192 @@ body {
 
 /* ===== Share Button ===== */
 .tweet-share-btn {
-  background: none;
-  border: none;
+  width: 30px;
+  height: 30px;
+  margin-left: 2px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.42);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.36);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.35);
   cursor: pointer;
-  padding: 4px;
-  margin-left: 8px;
-  color: var(--text-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+:root[data-theme="dark"] .tweet-share-btn {
+  border-color: rgba(255,255,255,0.16);
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.1);
+}
+
+.tweet-share-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.4;
 }
 
 .tweet-share-btn:hover {
-  color: var(--accent);
+  color: #fff;
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* ===== Share Card ===== */
+.sharecard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(5, 7, 13, 0.68);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  animation: sharecard-fade-in 0.22s ease;
+}
+
+.sharecard-panel {
+  width: min(540px, 100%);
+  max-height: calc(100vh - 56px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 32px;
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 32px 90px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.32);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+}
+
+:root[data-theme="dark"] .sharecard-panel {
+  background: rgba(8, 10, 16, 0.62);
+  border-color: rgba(255,255,255,0.16);
+}
+
+.sharecard-header,
+.sharecard-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sharecard-header h2 {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+.sharecard-status {
+  margin: 6px 0 0;
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+}
+
+.sharecard-icon-btn,
+.sharecard-btn {
+  border: 1px solid rgba(255,255,255,0.34);
+  color: #fff;
+  background: rgba(255,255,255,0.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+}
+
+.sharecard-icon-btn:hover,
+.sharecard-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.22);
+}
+
+.sharecard-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.sharecard-preview {
+  min-height: 0;
+  padding: 12px;
+  overflow: auto;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 24px;
+  background: rgba(0,0,0,0.18);
+}
+
+.sharecard-canvas {
+  display: block;
+  width: min(100%, 390px);
+  height: auto;
+  margin: 0 auto;
+  border-radius: 18px;
+  box-shadow: 0 18px 46px rgba(0,0,0,0.3);
+}
+
+.sharecard-actions {
+  justify-content: flex-end;
+}
+
+.sharecard-btn {
+  min-width: 118px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sharecard-btn-primary {
+  border-color: rgba(41,151,255,0.62);
+  background: linear-gradient(135deg, #2997ff, #0066cc);
+}
+
+.sharecard-btn:disabled {
+  cursor: wait;
+  opacity: 0.56;
+}
+
+@keyframes sharecard-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 560px) {
+  .sharecard-overlay {
+    padding: 14px;
+  }
+
+  .sharecard-panel {
+    max-height: calc(100vh - 28px);
+    padding: 16px;
+    border-radius: 26px;
+  }
+
+  .sharecard-header,
+  .sharecard-actions {
+    align-items: stretch;
+  }
+
+  .sharecard-actions {
+    flex-direction: column-reverse;
+  }
+
+  .sharecard-btn {
+    width: 100%;
+  }
 }
 
 /* ===== Lightbox ===== */
@@ -731,11 +913,13 @@ body {
   position: fixed;
   inset: 0;
   z-index: 10001;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 24px;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   animation: lightbox-in 0.2s ease;
 }
 
@@ -743,80 +927,22 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 24px;
+  gap: 18px;
+  width: min(420px, 100%);
 }
 
 .sharecard-preview {
-  max-width: 500px;
+  width: min(420px, calc(100vw - 48px));
+  max-height: calc(100vh - 132px);
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.32);
+}
+
+.sharecard-canvas {
+  display: block;
   width: 100%;
-}
-
-.sharecard-inner {
-  padding: 28px 32px;
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(20px);
-}
-
-.sharecard-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.sharecard-avatar {
-  font-family: var(--font-hand);
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.sharecard-mood {
-  font-size: 20px;
-}
-
-.sharecard-time {
-  margin-left: auto;
-  font-size: 13px;
-  color: var(--text-tertiary);
-}
-
-.sharecard-body {
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text-primary);
-}
-
-.sharecard-body p:last-child {
-  margin-bottom: 0;
-}
-
-.sharecard-img img {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  margin-top: 12px;
-}
-
-.sharecard-tags {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.sharecard-tags span {
-  font-size: 12px;
-  color: var(--accent);
-}
-
-.sharecard-footer {
-  margin-top: 16px;
-  font-family: var(--font-hand);
-  font-size: 14px;
-  color: var(--text-tertiary);
-  text-align: right;
+  height: auto;
 }
 
 .sharecard-actions {
@@ -833,12 +959,17 @@ body {
   font-family: var(--font-sans);
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-.sharecard-btn:hover {
+.sharecard-btn:hover:not(:disabled) {
   background: var(--glass-hover);
   box-shadow: var(--glass-shadow);
+}
+
+.sharecard-btn:disabled {
+  cursor: wait;
+  opacity: 0.62;
 }
 
 .sharecard-btn-primary {
@@ -847,9 +978,10 @@ body {
   border-color: var(--accent);
 }
 
-.sharecard-btn-primary:hover {
+.sharecard-btn-primary:hover:not(:disabled) {
   opacity: 0.9;
 }
+
 
 /* ===== Insights ===== */
 .insights {
