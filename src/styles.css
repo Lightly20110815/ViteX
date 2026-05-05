@@ -191,7 +191,7 @@ body {
   border-radius: 46px;
   pointer-events: none;
   opacity: 0;
-  transform: translate3d(var(--portal-dx, 0px), calc(var(--portal-dy, 0px) + var(--scroll-drift, 0px)), 0) rotate(var(--portal-rot, -4deg));
+  transform: translate3d(var(--portal-dx, 0px), calc(var(--portal-dy, 0px) + var(--portal-scroll-drift, 0px)), 0) rotate(var(--portal-rot, -4deg));
   transform-origin: 50% 45%;
   transition: opacity 1.5s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-mask: radial-gradient(130% 92% at 50% 50%, #000 0%, #000 48%, rgba(0,0,0,0.72) 64%, transparent 86%);
@@ -219,7 +219,7 @@ body {
   background-attachment: fixed;
   pointer-events: none;
   opacity: 0;
-  transform: translate3d(var(--lens-dx, 0px), calc(var(--lens-dy, 0px) + var(--scroll-drift, 0px)), 0) rotate(-11deg);
+  transform: translate3d(var(--lens-dx, 0px), calc(var(--lens-dy, 0px) + var(--lens-scroll-drift, 0px)), 0) rotate(-11deg);
   transition: opacity 1.5s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-mask: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.18) 23%, #000 42%, #000 58%, rgba(0,0,0,0.18) 78%, transparent 100%);
   mask: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.18) 23%, #000 42%, #000 58%, rgba(0,0,0,0.18) 78%, transparent 100%);
@@ -336,18 +336,14 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
   margin-top: 48px;
-  transform-style: preserve-3d;
-  transition: transform 0.18s ease-out, box-shadow 0.3s ease;
-  will-change: transform;
   --card-rotate-x: 0deg;
   --card-rotate-y: 0deg;
-  transform: rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y));
+  transform: perspective(1000px) rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y));
 }
 
 .sidebar > * {
   position: relative;
   z-index: 1;
-  transform: translateZ(24px);
 }
 
 .sidebar:hover {
@@ -437,8 +433,7 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
   padding: 32px;
-  transform: rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y));
-  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y));
   transition: transform 0.18s ease-out, box-shadow 0.3s ease;
   will-change: transform;
 }
@@ -453,7 +448,6 @@ body {
 .tweet-card > * {
   position: relative;
   z-index: 1;
-  transform: translateZ(24px);
 }
 
 .tweet-header {
@@ -1229,19 +1223,17 @@ html::after {
   border-radius: inherit;
   pointer-events: none;
   background:
-    linear-gradient(90deg, transparent, rgba(255,255,255,0.24), transparent),
+    radial-gradient(circle at var(--shine-x, 50%) var(--shine-y, 0%), rgba(255,255,255,0.24), transparent 34%),
     linear-gradient(180deg, rgba(255,255,255,0.12), transparent 26%);
   opacity: 0;
-  transform: translateX(-32%);
-  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.35s ease;
 }
 
 .tweet-card:hover::before,
 .tweet-card.is-current::before,
 .insight-panel:hover::after,
 .sidebar:hover::before {
-  opacity: 0.72;
-  transform: translateX(32%);
+  opacity: 0.62;
 }
 
 .tweet-card.is-current {
@@ -1358,7 +1350,161 @@ html::after {
   50% { filter: saturate(1.22) contrast(1.06); }
 }
 
+.music-player {
+  position: fixed;
+  right: 28px;
+  bottom: 26px;
+  z-index: 1100;
+  max-width: min(360px, calc(100vw - 56px));
+}
+
+.music-player-shell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.music-player-toggle {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,0.38);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  font-family: var(--font-hand);
+  font-size: 26px;
+  line-height: 1;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.music-player-toggle:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: var(--glass-hover);
+  box-shadow: 0 18px 48px rgba(0,0,0,0.18);
+}
+
+.music-player-content {
+  min-width: 214px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.38);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  transition: width 0.25s ease, opacity 0.2s ease, transform 0.25s ease;
+}
+
+.music-player.is-collapsed .music-player-content {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(12px) scale(0.96);
+  pointer-events: none;
+}
+
+.music-player-status {
+  min-width: 154px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.music-player .aplayer {
+  margin: 0;
+  color: var(--text-primary);
+  background: transparent;
+  box-shadow: none;
+  font-family: var(--font-sans);
+}
+
+.music-player .aplayer-body {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px 6px 6px;
+  pointer-events: none;
+}
+
+.music-player .aplayer-pic {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  margin-right: 8px;
+  border-radius: 50%;
+  outline: 1px solid rgba(255,255,255,0.38);
+  animation: music-cover-rotate 20s linear infinite;
+  animation-play-state: paused;
+}
+
+.music-player .aplayer.aplayer-playing .aplayer-pic {
+  animation-play-state: running;
+}
+
+.music-player .aplayer-button,
+.music-player .aplayer-author,
+.music-player .aplayer-lrc,
+.music-player .aplayer-controller,
+.music-player .aplayer-list,
+.music-player .aplayer-notice,
+.music-player .aplayer-miniswitcher {
+  display: none !important;
+}
+
+.music-player .aplayer-info {
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.music-player .aplayer-music {
+  height: auto;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.music-player .aplayer-title {
+  display: block;
+  max-width: 142px;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes music-cover-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
 @media (max-width: 768px) {
+  .music-player {
+    right: 18px;
+    bottom: 18px;
+    max-width: calc(100vw - 36px);
+  }
+
+  .music-player-content {
+    min-width: 188px;
+  }
+
+  .music-player .aplayer-title {
+    max-width: 118px;
+  }
+
   .mission-hud {
     left: 18px;
     right: 18px;

@@ -1,3 +1,4 @@
+import 'aplayer/dist/APlayer.min.css';
 import './styles.css';
 
 import { tweets } from './data/tweets';
@@ -9,6 +10,7 @@ import { renderCursor } from './components/Cursor';
 import { renderTrailingCursor } from './components/TrailingCursor';
 import { createHRTTimeline } from './components/HRTTimeline';
 import { createMoodStats } from './components/MoodStats';
+import { renderMusicPlayer } from './components/MusicPlayer';
 
 function main(): void {
   renderCanvasParticles();
@@ -17,6 +19,7 @@ function main(): void {
   renderProfile(profile, tweets);
   renderInsights();
   renderTimeline(tweets);
+  renderMusicPlayer();
   renderFooter();
 
   requestAnimationFrame(() => {
@@ -26,7 +29,7 @@ function main(): void {
     }
   });
 
-  initPointerTrack();
+  initBackgroundPanels();
   initCardPerspective();
   initScrollExperience();
 }
@@ -45,14 +48,19 @@ function renderInsights(): void {
     el.appendChild(moodEl);
   }
 }
-function initPointerTrack(): void {
+function initBackgroundPanels(): void {
   const clearBg = document.querySelector<HTMLElement>('.bg-clear');
   const lens = document.querySelector<HTMLElement>('.bg-lens');
   if (!clearBg && !lens) return;
 
-  document.addEventListener('mousemove', (e) => {
-    const nx = e.clientX / window.innerWidth - 0.5;
-    const ny = e.clientY / window.innerHeight - 0.5;
+  let frame = 0;
+  let pointerX = window.innerWidth / 2;
+  let pointerY = window.innerHeight / 2;
+
+  function updatePanels(): void {
+    frame = 0;
+    const nx = pointerX / window.innerWidth - 0.5;
+    const ny = pointerY / window.innerHeight - 0.5;
 
     if (clearBg) {
       clearBg.style.setProperty('--portal-dx', `${nx * 28}px`);
@@ -65,7 +73,27 @@ function initPointerTrack(): void {
       lens.style.setProperty('--lens-dx', `${nx * -34}px`);
       lens.style.setProperty('--lens-dy', `${ny * -24}px`);
     }
-  });
+  }
+
+  function scheduleUpdate(): void {
+    if (frame === 0) {
+      frame = requestAnimationFrame(updatePanels);
+    }
+  }
+
+  document.addEventListener('pointermove', (event) => {
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    scheduleUpdate();
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    pointerX = window.innerWidth / 2;
+    pointerY = window.innerHeight / 2;
+    scheduleUpdate();
+  }, { passive: true });
+
+  updatePanels();
 }
 
 function initCardPerspective(): void {
@@ -89,8 +117,13 @@ function initCardPerspective(): void {
       const rotateY = clamp(((pointerX - centerX) / window.innerWidth) * 14, -7, 7);
       const rotateX = clamp(((centerY - pointerY) / window.innerHeight) * 10, -5, 5);
 
+      const localX = clamp(((pointerX - rect.left) / rect.width) * 100, 0, 100);
+      const localY = clamp(((pointerY - rect.top) / rect.height) * 100, 0, 100);
+
       card.style.setProperty('--card-rotate-x', `${rotateX.toFixed(2)}deg`);
       card.style.setProperty('--card-rotate-y', `${rotateY.toFixed(2)}deg`);
+      card.style.setProperty('--shine-x', `${localX.toFixed(1)}%`);
+      card.style.setProperty('--shine-y', `${localY.toFixed(1)}%`);
     }
   }
 
@@ -152,8 +185,8 @@ function initScrollExperience(): void {
     root.style.setProperty('--scroll-progress', ratio.toFixed(4));
     if (progress) progress.style.setProperty('--scroll-progress', ratio.toFixed(4));
     if (missionValue) missionValue.textContent = `${Math.round(ratio * 100).toString().padStart(2, '0')}%`;
-    if (clearBg) clearBg.style.setProperty('--scroll-drift', `${ratio * 34}px`);
-    if (lens) lens.style.setProperty('--scroll-drift', `${ratio * -28}px`);
+    if (clearBg) clearBg.style.setProperty('--portal-scroll-drift', `${ratio * 34}px`);
+    if (lens) lens.style.setProperty('--lens-scroll-drift', `${ratio * -28}px`);
     updateCurrentCard();
   }
 
