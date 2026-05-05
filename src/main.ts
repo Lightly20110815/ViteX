@@ -9,7 +9,6 @@ import { renderCursor } from './components/Cursor';
 import { renderTrailingCursor } from './components/TrailingCursor';
 import { createHRTTimeline } from './components/HRTTimeline';
 import { createMoodStats } from './components/MoodStats';
-import { renderMusicPlayer } from './components/MusicPlayer';
 
 function main(): void {
   renderCanvasParticles();
@@ -18,7 +17,6 @@ function main(): void {
   renderProfile(profile, tweets);
   renderInsights();
   renderTimeline(tweets);
-  if (profile.music) renderMusicPlayer(profile.music);
   renderFooter();
 
   requestAnimationFrame(() => {

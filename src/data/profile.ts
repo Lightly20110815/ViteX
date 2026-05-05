@@ -7,13 +7,6 @@ export interface ProfileData {
   avatarUrl: string;
   backgroundUrl: string;
   hrtPhases?: HRTPhase[];
-  music?: {
-    enable: boolean;
-    url: string;
-    id: string;
-    server: string;
-    type: string;
-  };
 }
 
 export const profile: ProfileData = {
@@ -25,11 +18,4 @@ export const profile: ProfileData = {
     { label: 'Phase 1', start: '2025-08-11', end: '2025-11-30' },
     { label: 'Phase 2', start: '2026-04-17' },
   ],
-  music: {
-    enable: true,
-    url: 'https://meting.20110815.xyz/api',
-    id: '14022768906',
-    server: 'netease',
-    type: 'playlist',
-  },
 };
