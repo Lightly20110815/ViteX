@@ -57,7 +57,7 @@ export function renderProfile(data: ProfileData, tweets?: TweetData[]): void {
   bioContainer.className = 'sidebar-bio-container';
 
   const bioParts = data.bio.split(' | ');
-  bioParts.forEach(part => {
+  bioParts.forEach((part) => {
     const p = document.createElement('p');
     p.className = 'sidebar-bio-part';
 
@@ -79,4 +79,3 @@ export function renderProfile(data: ProfileData, tweets?: TweetData[]): void {
     if (tagEl) sidebar.appendChild(tagEl);
   }
 }
-

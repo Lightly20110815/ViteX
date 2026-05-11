@@ -55,10 +55,10 @@ created: 2026-05-02T12:00:00+08:00
 
 ### Frontmatter 字段
 
-| 字段      | 类型     | 说明                  |
-|---------|----------|---------------------|
-| `mood`  | `string` | 心情表情（如 `😊`）      |
-| `created` | `string` | ISO 8601 创建时间      |
+| 字段      | 类型     | 说明                |
+| --------- | -------- | ------------------- |
+| `mood`    | `string` | 心情表情（如 `😊`） |
+| `created` | `string` | ISO 8601 创建时间   |
 
 ## 部署
 
@@ -98,24 +98,24 @@ vitex/
 
 ## 技术栈
 
-| 层级      | 技术选型              |
-|---------|-------------------|
-| 构建工具   | Vite 8            |
-| 开发语言   | TypeScript 5.8    |
-| Markdown | marked + gray-matter |
+| 层级     | 技术选型              |
+| -------- | --------------------- |
+| 构建工具 | Vite 8                |
+| 开发语言 | TypeScript 5.8        |
+| Markdown | marked + gray-matter  |
 | 样式     | Pico.css + 自定义 CSS |
-| 代码高亮   | highlight.js     |
-| 时间处理   | dayjs             |
-| 部署平台   | Vercel            |
+| 代码高亮 | highlight.js          |
+| 时间处理 | dayjs                 |
+| 部署平台 | Vercel                |
 
 ## 命令
 
-| 命令              | 操作              |
-|-----------------|-----------------|
-| `pnpm dev`      | 启动 Vite 开发服务器 |
-| `pnpm build`    | 生产环境构建        |
-| `pnpm preview`  | 预览生产构建        |
-| `pnpm deploy`   | 构建并推送到 Vercel  |
+| 命令           | 操作                 |
+| -------------- | -------------------- |
+| `pnpm dev`     | 启动 Vite 开发服务器 |
+| `pnpm build`   | 生产环境构建         |
+| `pnpm preview` | 预览生产构建         |
+| `pnpm deploy`  | 构建并推送到 Vercel  |
 
 ## 开源协议
 

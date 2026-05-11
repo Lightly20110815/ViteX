@@ -1,3 +1,5 @@
+import { musicConfig } from '../data/music-config';
+
 type MusicServer = 'netease' | 'tencent' | 'kugou';
 type MusicType = 'playlist' | 'album' | 'song';
 
@@ -35,14 +37,6 @@ type APlayerConstructor = new (options: {
   order: string;
   audio: APlayerAudio[];
 }) => APlayerInstance;
-
-const musicConfig = {
-  enable: true,
-  url: 'https://meting.20110815.xyz/api',
-  id: '14022768906',
-  server: 'netease' as MusicServer,
-  type: 'playlist' as MusicType,
-};
 
 const storageKeys = {
   visible: 'vitex:music-player:visible',
@@ -133,7 +127,7 @@ async function getMusicList(): Promise<APlayerAudio[]> {
   const response = await fetch(endpoint);
   if (!response.ok) throw new Error(`Meting API returned ${response.status}`);
 
-  const list = await response.json() as MetingSong[];
+  const list = (await response.json()) as MetingSong[];
   return list.map(({ pic, ...song }) => ({
     ...song,
     cover: song.cover ?? pic,
@@ -146,7 +140,7 @@ async function initAPlayer(playlist: APlayerAudio[]): Promise<void> {
   statusEl.remove();
   player?.destroy();
 
-  const module = await import('aplayer') as { default: APlayerConstructor };
+  const module = (await import('aplayer')) as { default: APlayerConstructor };
   const APlayer = module.default;
 
   player = new APlayer({

@@ -68,7 +68,7 @@ function loop() {
   const h = window.innerHeight;
   ctx.clearRect(0, 0, w, h);
 
-  particles.forEach(p => {
+  particles.forEach((p) => {
     p.update();
     p.draw();
   });
@@ -89,7 +89,7 @@ function loop() {
     }
   }
 
-  particles.forEach(p => {
+  particles.forEach((p) => {
     if (!ctx) return;
     const dx = mouse.x - p.x;
     const dy = mouse.y - p.y;

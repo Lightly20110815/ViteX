@@ -268,7 +268,11 @@ type ShareLayout = {
   footerY: number;
 };
 
-function measureShareLayout(ctx: CanvasRenderingContext2D, content: ShareContent, image: HTMLImageElement | null): ShareLayout {
+function measureShareLayout(
+  ctx: CanvasRenderingContext2D,
+  content: ShareContent,
+  image: HTMLImageElement | null,
+): ShareLayout {
   ctx.font = BODY_FONT;
 
   const imageY = CARD_Y + 238;
@@ -293,7 +297,6 @@ function measureShareLayout(ctx: CanvasRenderingContext2D, content: ShareContent
     footerY,
   };
 }
-
 
 function getShareTheme(): ShareTheme {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -350,7 +353,10 @@ function measureTagsHeight(ctx: CanvasRenderingContext2D, tags: string[]): numbe
 }
 
 function wrapParagraphs(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-  const paragraphs = text.split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 
   if (paragraphs.length === 0) return [''];
 
@@ -422,7 +428,17 @@ function drawHeader(ctx: CanvasRenderingContext2D, content: ShareContent, theme:
   ctx.textBaseline = 'alphabetic';
   ctx.fillText(content.author, CONTENT_X, headerY + 34);
 
-  drawPill(ctx, content.mood, CONTENT_X + 108, headerY - 26, 78, 56, theme.accentSoft, theme.accent, '34px system-ui, sans-serif');
+  drawPill(
+    ctx,
+    content.mood,
+    CONTENT_X + 108,
+    headerY - 26,
+    78,
+    56,
+    theme.accentSoft,
+    theme.accent,
+    '34px system-ui, sans-serif',
+  );
 
   ctx.fillStyle = theme.textSecondary;
   ctx.font = '700 26px "Quicksand", system-ui, sans-serif';
@@ -573,7 +589,14 @@ function drawPill(
   ctx.textBaseline = 'alphabetic';
 }
 
-function drawOrbit(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, rotation: number, color: string): void {
+function drawOrbit(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rotation: number,
+  color: string,
+): void {
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(rotation);
@@ -648,7 +671,10 @@ function breakLongToken(ctx: CanvasRenderingContext2D, token: string, maxWidth: 
 }
 
 function tokenizeText(text: string): string[] {
-  return Array.from(text.matchAll(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]|\S+\s*/gu), (match) => match[0]);
+  return Array.from(
+    text.matchAll(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]|\S+\s*/gu),
+    (match) => match[0],
+  );
 }
 
 async function loadImage(src: string): Promise<HTMLImageElement | null> {
@@ -671,7 +697,10 @@ function extractText(html: string): string {
     node.appendChild(document.createTextNode('\n\n'));
   });
 
-  return (div.textContent ?? '').replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+  return (div.textContent ?? '')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function getShareSource(slug: string): string {

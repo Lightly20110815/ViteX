@@ -39,6 +39,7 @@ export function createTagFilter(tweets: TweetData[]): HTMLElement | null {
     const btn = document.createElement('button');
     btn.className = 'tag-cloud-item';
     btn.textContent = `${tag} (${count})`;
+    btn.dataset.tag = tag;
     btn.addEventListener('click', () => {
       activeTag = tag;
       updateActiveTag(cloud, tag);
@@ -56,7 +57,7 @@ function updateActiveTag(cloud: HTMLElement, active: string | null): void {
   items.forEach((item, index) => {
     if (active === null && index === 0) {
       item.classList.add('tag-cloud-active');
-    } else if (active !== null && item.textContent?.startsWith(active)) {
+    } else if (active !== null && (item as HTMLElement).dataset.tag === active) {
       item.classList.add('tag-cloud-active');
     } else {
       item.classList.remove('tag-cloud-active');

@@ -81,17 +81,25 @@ function initBackgroundPanels(): void {
     }
   }
 
-  document.addEventListener('pointermove', (event) => {
-    pointerX = event.clientX;
-    pointerY = event.clientY;
-    scheduleUpdate();
-  }, { passive: true });
+  document.addEventListener(
+    'pointermove',
+    (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      scheduleUpdate();
+    },
+    { passive: true },
+  );
 
-  window.addEventListener('resize', () => {
-    pointerX = window.innerWidth / 2;
-    pointerY = window.innerHeight / 2;
-    scheduleUpdate();
-  }, { passive: true });
+  window.addEventListener(
+    'resize',
+    () => {
+      pointerX = window.innerWidth / 2;
+      pointerY = window.innerHeight / 2;
+      scheduleUpdate();
+    },
+    { passive: true },
+  );
 
   updatePanels();
 }
@@ -101,6 +109,7 @@ function initCardPerspective(): void {
   let pointerX = window.innerWidth / 2;
   let pointerY = window.innerHeight / 2;
   let frame = 0;
+  let observer: MutationObserver | null = null;
 
   function getTargets(): HTMLElement[] {
     return Array.from(document.querySelectorAll<HTMLElement>('.tweet-card, .sidebar'));
@@ -133,21 +142,27 @@ function initCardPerspective(): void {
     }
   }
 
-  document.addEventListener('pointermove', (e) => {
-    pointerX = e.clientX;
-    pointerY = e.clientY;
-    scheduleUpdate();
-  }, { passive: true });
+  document.addEventListener(
+    'pointermove',
+    (e) => {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      scheduleUpdate();
+    },
+    { passive: true },
+  );
   document.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', scheduleUpdate, { passive: true });
 
   // Re-apply to new cards after DOM changes (e.g. tag filter)
-  const observer = new MutationObserver(() => scheduleUpdate());
-  observer.observe(document.getElementById('timeline')!, { childList: true });
+  const timeline = document.getElementById('timeline');
+  if (timeline) {
+    observer = new MutationObserver(() => scheduleUpdate());
+    observer.observe(timeline, { childList: true });
+  }
 
   updateCards();
 }
-
 
 function initScrollExperience(): void {
   const root = document.documentElement;
@@ -184,33 +199,40 @@ function initScrollExperience(): void {
     const ratio = Math.min(1, Math.max(0, window.scrollY / max));
     root.style.setProperty('--scroll-progress', ratio.toFixed(4));
     if (progress) progress.style.setProperty('--scroll-progress', ratio.toFixed(4));
-    if (missionValue) missionValue.textContent = `${Math.round(ratio * 100).toString().padStart(2, '0')}%`;
+    if (missionValue)
+      missionValue.textContent = `${Math.round(ratio * 100)
+        .toString()
+        .padStart(2, '0')}%`;
     if (clearBg) clearBg.style.setProperty('--portal-scroll-drift', `${ratio * 34}px`);
     if (lens) lens.style.setProperty('--lens-scroll-drift', `${ratio * -28}px`);
     updateCurrentCard();
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
       }
-    }
-  }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+    },
+    { threshold: 0.14, rootMargin: '0px 0px -8% 0px' },
+  );
 
   function trackReveal(el: Element): void {
     el.classList.add('reveal-on-scroll');
-    observer.observe(el);
+    revealObserver.observe(el);
   }
 
   document.querySelectorAll('.tweet-card, .insight-panel, .sidebar').forEach(trackReveal);
 
   const timeline = document.getElementById('timeline');
   if (timeline) {
-    new MutationObserver(() => {
+    const domObserver = new MutationObserver(() => {
       timeline.querySelectorAll('.tweet-card:not(.reveal-on-scroll)').forEach(trackReveal);
       updateCurrentCard();
-    }).observe(timeline, { childList: true });
+    });
+    domObserver.observe(timeline, { childList: true });
   }
 
   window.addEventListener('scroll', updateProgress, { passive: true });

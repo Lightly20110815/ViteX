@@ -17,6 +17,4 @@ export const tweets: TweetData[] = Object.entries(modules)
       slug,
     };
   })
-  .sort((a, b) =>
-    new Date(b.meta.created).getTime() - new Date(a.meta.created).getTime()
-  );
+  .sort((a, b) => new Date(b.meta.created).getTime() - new Date(a.meta.created).getTime());

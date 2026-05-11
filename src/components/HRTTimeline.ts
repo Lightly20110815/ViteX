@@ -42,7 +42,8 @@ export function createHRTTimeline(phases: HRTPhase[]): HTMLElement {
 
   const summary = document.createElement('p');
   summary.className = 'insight-summary';
-  summary.textContent = activeIndex >= 0 ? `当前阶段第 ${activeDays} 天，累计记录 ${totalDays} 天。` : `累计记录 ${totalDays} 天。`;
+  summary.textContent =
+    activeIndex >= 0 ? `当前阶段第 ${activeDays} 天，累计记录 ${totalDays} 天。` : `累计记录 ${totalDays} 天。`;
 
   const rail = document.createElement('ol');
   rail.className = 'hrt-phase-rail';
