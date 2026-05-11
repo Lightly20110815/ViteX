@@ -1,4 +1,3 @@
-import type { TweetMeta } from '../types/TweetData';
 import type { HRTPhase } from '../components/HRTTimeline';
 
 export interface ProfileData {

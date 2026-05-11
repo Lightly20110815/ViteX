@@ -109,7 +109,6 @@ function initCardPerspective(): void {
   let pointerX = window.innerWidth / 2;
   let pointerY = window.innerHeight / 2;
   let frame = 0;
-  let observer: MutationObserver | null = null;
 
   function getTargets(): HTMLElement[] {
     return Array.from(document.querySelectorAll<HTMLElement>('.tweet-card, .sidebar'));
@@ -157,7 +156,7 @@ function initCardPerspective(): void {
   // Re-apply to new cards after DOM changes (e.g. tag filter)
   const timeline = document.getElementById('timeline');
   if (timeline) {
-    observer = new MutationObserver(() => scheduleUpdate());
+    const observer = new MutationObserver(() => scheduleUpdate());
     observer.observe(timeline, { childList: true });
   }
 

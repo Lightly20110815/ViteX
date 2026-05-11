@@ -1,8 +1,5 @@
 import { musicConfig } from '../data/music-config';
 
-type MusicServer = 'netease' | 'tencent' | 'kugou';
-type MusicType = 'playlist' | 'album' | 'song';
-
 type MetingSong = {
   name?: string;
   artist?: string;

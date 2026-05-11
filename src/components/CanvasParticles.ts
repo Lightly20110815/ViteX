@@ -2,7 +2,7 @@ let canvasRef: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
 let animId = 0;
 let particles: Dot[] = [];
-let mouse = { x: -999, y: -999 };
+const mouse = { x: -999, y: -999 };
 
 const NUM = 40;
 

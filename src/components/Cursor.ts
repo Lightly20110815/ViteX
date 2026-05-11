@@ -1,5 +1,4 @@
 let cursorEl: HTMLDivElement | null = null;
-let rafId = 0;
 
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
@@ -35,7 +34,6 @@ export function renderCursor(): void {
 }
 
 export function destroyCursor(): void {
-  cancelAnimationFrame(rafId);
   cursorEl?.remove();
   cursorEl = null;
 }

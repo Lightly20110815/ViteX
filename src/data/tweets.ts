@@ -5,7 +5,7 @@ const modules = import.meta.glob('/content/tweets/**/*.md', { eager: true });
 export const tweets: TweetData[] = Object.entries(modules)
   .map(([path, mod]) => {
     const m = mod as { meta: { mood: string; created: string; images?: string[]; tags?: string[] }; html: string };
-    const slug = path.split('/').pop()!.replace(/\.md$/, '');
+    const slug = path.replace(/^\/content\/tweets\//, '').replace(/\.md$/, '');
     return {
       meta: {
         mood: m.meta.mood,

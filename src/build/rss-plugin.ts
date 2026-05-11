@@ -3,8 +3,7 @@ import { resolve } from 'path';
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'fs';
 import grayMatter from '@11ty/gray-matter';
 import { renderMarkdown } from '../utils/marked-config';
-
-const FEED_URL = 'https://vite-x.vercel.app';
+import { siteConfig } from '../config/site';
 
 export function rssPlugin(): Plugin {
   return {
@@ -44,7 +43,7 @@ interface RssItem {
 function collectItems(dir: string): RssItem[] {
   const items: RssItem[] = [];
 
-  function walk(currentDir: string) {
+  function walk(currentDir: string, relativeDir: string) {
     let entries: string[];
     try {
       entries = readdirSync(currentDir);
@@ -56,11 +55,12 @@ function collectItems(dir: string): RssItem[] {
       const fullPath = resolve(currentDir, entry);
       const s = statSync(fullPath);
       if (s.isDirectory()) {
-        walk(fullPath);
+        walk(fullPath, relativeDir ? `${relativeDir}/${entry}` : entry);
       } else if (entry.endsWith('.md')) {
         const raw = readFileSync(fullPath, 'utf-8');
         const { data, content } = grayMatter(raw);
-        const slug = entry.replace(/\.md$/, '');
+        const filename = entry.replace(/\.md$/, '');
+        const slug = relativeDir ? `${relativeDir}/${filename}` : filename;
         const date = data.created
           ? typeof data.created === 'string'
             ? data.created
@@ -74,7 +74,7 @@ function collectItems(dir: string): RssItem[] {
 
         items.push({
           title: `${data.mood || '📝'} ${text.slice(0, 60)}`,
-          link: `${FEED_URL}/#tweet-${slug}`,
+          link: `${siteConfig.url}/#tweet-${slug}`,
           date,
           description: renderMarkdown(content.trim()),
           tags: Array.isArray(data.tags) ? data.tags : typeof data.tags === 'string' ? [data.tags] : undefined,
@@ -83,7 +83,7 @@ function collectItems(dir: string): RssItem[] {
     }
   }
 
-  walk(dir);
+  walk(dir, '');
   return items;
 }
 
@@ -93,12 +93,12 @@ function buildRssXml(items: RssItem[]): string {
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">`,
     `  <channel>`,
-    `    <title>${escapeXml('Sy — Timeline')}</title>`,
-    `    <link>${FEED_URL}</link>`,
-    `    <description>${escapeXml('Personal Twitter-style timeline powered by ViteX')}</description>`,
-    `    <language>zh-CN</language>`,
+    `    <title>${escapeXml(siteConfig.title)}</title>`,
+    `    <link>${siteConfig.url}</link>`,
+    `    <description>${escapeXml(siteConfig.description)}</description>`,
+    `    <language>${siteConfig.language}</language>`,
     `    <lastBuildDate>${now}</lastBuildDate>`,
-    `    <atom:link href="${FEED_URL}/rss.xml" rel="self" type="application/rss+xml" />`,
+    `    <atom:link href="${siteConfig.url}/rss.xml" rel="self" type="application/rss+xml" />`,
   ];
 
   for (const item of items) {

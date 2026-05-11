@@ -1,7 +1,5 @@
 import type { TweetData } from '../types/TweetData';
 
-let activeTag: string | null = null;
-
 export function createTagFilter(tweets: TweetData[]): HTMLElement | null {
   const tagCounts: Record<string, number> = {};
   for (const tweet of tweets) {
@@ -29,7 +27,6 @@ export function createTagFilter(tweets: TweetData[]): HTMLElement | null {
   allBtn.className = 'tag-cloud-item tag-cloud-active';
   allBtn.textContent = '全部';
   allBtn.addEventListener('click', () => {
-    activeTag = null;
     updateActiveTag(cloud, null);
     dispatchTagFilterEvent(null);
   });
@@ -41,7 +38,6 @@ export function createTagFilter(tweets: TweetData[]): HTMLElement | null {
     btn.textContent = `${tag} (${count})`;
     btn.dataset.tag = tag;
     btn.addEventListener('click', () => {
-      activeTag = tag;
       updateActiveTag(cloud, tag);
       dispatchTagFilterEvent(tag);
     });
