@@ -75,7 +75,9 @@ function jsonRes(res, status, data) {
 
 function runCmd(cmd, args, cwd) {
   return new Promise((resolve, reject) => {
-    const child = spawn(cmd, args, { cwd, shell: process.platform === 'win32' });
+    // Don't use shell:true on Windows — git.exe handles its own arg parsing,
+    // and shell:true would let cmd.exe re-tokenize quoted args (breaks commit messages with spaces).
+    const child = spawn(cmd, args, { cwd, windowsHide: true });
     let out = '';
     let err = '';
     child.stdout.on('data', (d) => (out += d.toString()));
@@ -317,18 +319,30 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  const target = `http://localhost:${PORT}/`;
-  console.log(`\n  ViteX post tool ready → ${target}`);
-  console.log(`  project root: ${PROJECT_ROOT}\n`);
-  // try to open the browser
-  const opener =
-    process.platform === 'win32' ? ['cmd', ['/c', 'start', '', target]] :
-    process.platform === 'darwin' ? ['open', [target]] :
-    ['xdg-open', [target]];
-  try {
-    spawn(opener[0], opener[1], { stdio: 'ignore', detached: true }).unref();
-  } catch {
-    /* fall through — user can open manually */
-  }
-});
+function startListening(port, attemptsLeft) {
+  server.once('error', (err) => {
+    if (err && err.code === 'EADDRINUSE' && attemptsLeft > 0) {
+      console.log(`  port ${port} busy, trying ${port + 1}…`);
+      setTimeout(() => startListening(port + 1, attemptsLeft - 1), 50);
+    } else {
+      console.error(err);
+      process.exit(1);
+    }
+  });
+  server.listen(port, () => {
+    const target = `http://localhost:${port}/`;
+    console.log(`\n  ViteX post tool ready → ${target}`);
+    console.log(`  project root: ${PROJECT_ROOT}\n`);
+    const opener =
+      process.platform === 'win32' ? ['cmd', ['/c', 'start', '', target]] :
+      process.platform === 'darwin' ? ['open', [target]] :
+      ['xdg-open', [target]];
+    try {
+      spawn(opener[0], opener[1], { stdio: 'ignore', detached: true }).unref();
+    } catch {
+      /* user can open manually */
+    }
+  });
+}
+
+startListening(PORT, 10);
