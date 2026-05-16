@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; media-src https: data: blob:; script-src 'self' 'unsafe-inline'; connect-src 'self' https://meting.20110815.xyz https://restapi.amap.com;"
+    />
+    <title>sy.os — booting…</title>
+    <link rel="alternate" type="application/rss+xml" title="Sy — Timeline" href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="os-body" data-boot="0" data-mode="day">
+    <div class="os-grain" aria-hidden="true"></div>
+    <div class="os-scanlines" aria-hidden="true"></div>
+    <div class="os-vignette" aria-hidden="true"></div>
+
+    <!-- Boot screen -->
+    <div class="os-boot" id="os-boot" aria-hidden="false">
+      <pre class="os-boot-log" id="os-boot-log"></pre>
+      <span class="os-boot-cursor" id="os-boot-cursor">_</span>
+    </div>
+
+    <!-- Top bar / titlebar -->
+    <header class="os-titlebar" id="os-titlebar" aria-label="System bar">
+      <div class="os-tl-left">
+        <span class="os-tl-dot is-red"></span>
+        <span class="os-tl-dot is-amber"></span>
+        <span class="os-tl-dot is-green"></span>
+        <span class="os-tl-path">~/sy/<span id="os-tl-path-state">main</span></span>
+      </div>
+      <div class="os-tl-center">
+        <span id="os-tl-greeting">sy.os // personality kernel</span>
+      </div>
+      <div class="os-tl-right">
+        <span id="os-tl-clock">--:--:--</span>
+        <span class="os-tl-sep">/</span>
+        <span id="os-tl-mode">day</span>
+      </div>
+    </header>
+
+    <!-- Main 3-column shell -->
+    <div class="os-shell" id="os-shell" aria-hidden="true">
+      <!-- LEFT: persona status -->
+      <aside class="os-panel os-panel-left" id="os-panel-left" aria-label="Persona status">
+        <section class="os-block" id="os-block-identity">
+          <div class="os-block-head">
+            <span class="os-block-tag">// identity</span>
+            <span class="os-block-pulse"></span>
+          </div>
+          <div class="os-id-name">Sy Yann</div>
+          <div class="os-id-line">online · with you, through all.</div>
+          <div class="os-id-meta" id="os-id-meta">14 years old / INFP / unstable build</div>
+        </section>
+
+        <section class="os-block" aria-labelledby="os-mental-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-mental-h">// mental_state</span>
+            <span class="os-block-mini" id="os-mental-uptime">uptime --</span>
+          </div>
+          <div class="os-mental-line" id="os-mental-state">low voltage</div>
+          <div class="os-mental-bar" aria-hidden="true">
+            <span class="os-mental-fill" id="os-mental-fill"></span>
+          </div>
+          <ul class="os-kv">
+            <li><span>alive probability</span><b id="os-alive">--%</b></li>
+            <li><span>last sleep</span><b id="os-sleep">-- ago</b></li>
+            <li><span>caffeine</span><b id="os-caffeine">--</b></li>
+            <li><span>buffer</span><b id="os-buffer">stable</b></li>
+          </ul>
+        </section>
+
+        <section class="os-block" aria-labelledby="os-env-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-env-h">// environment</span>
+            <span class="os-block-mini" id="os-env-coord">--</span>
+          </div>
+          <ul class="os-kv">
+            <li><span>weather</span><b id="os-weather">--</b></li>
+            <li><span>city</span><b id="os-outside">--</b></li>
+            <li><span>temperature</span><b id="os-temp">-- °C</b></li>
+            <li><span>humidity</span><b id="os-humidity">--%</b></li>
+            <li><span>wind</span><b id="os-wind">--</b></li>
+            <li><span>local time</span><b id="os-local">--:--</b></li>
+            <li><span>window</span><b id="os-window-state">open</b></li>
+          </ul>
+        </section>
+
+        <section class="os-block" aria-labelledby="os-now-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-now-h">// now_playing</span>
+            <span class="os-block-mini" id="os-now-source">meting · netease</span>
+          </div>
+          <div class="os-now-row">
+            <button class="os-now" id="os-now" type="button" aria-label="play / pause">
+              <div class="os-now-eq" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="os-now-meta">
+                <div class="os-now-track" id="os-now-track">signal lost</div>
+                <div class="os-now-artist" id="os-now-artist">—</div>
+              </div>
+            </button>
+          </div>
+          <div class="os-now-bar" aria-hidden="true"><span id="os-now-fill"></span></div>
+          <div class="os-now-controls">
+            <button class="os-now-btn" id="os-now-prev" type="button" aria-label="previous track">◀◀</button>
+            <button class="os-now-btn os-now-btn-play" id="os-now-toggle" type="button" aria-label="play / pause">▶</button>
+            <button class="os-now-btn" id="os-now-next" type="button" aria-label="next track">▶▶</button>
+            <span class="os-now-time" id="os-now-time">0:00 / 0:00</span>
+          </div>
+          <div class="os-now-host" id="os-now-host" hidden></div>
+        </section>
+      </aside>
+
+      <!-- CENTER: memory fragment stream -->
+      <main class="os-panel os-panel-center" id="os-panel-center" aria-label="Memory fragments">
+        <div class="os-stream-head">
+          <div class="os-stream-eyebrow">
+            <span class="os-arrow">›</span> sy.memdump
+            <span class="os-stream-meta" id="os-stream-meta">streaming · <b id="os-frag-count">0</b> fragments</span>
+          </div>
+          <h1 class="os-stream-title" id="os-greeting">hello stranger</h1>
+          <p class="os-stream-sub" id="os-stream-sub">
+            一个人的内存转储 — 情绪、思考、coding、噪音、云层、错误日志全部流过这里。
+          </p>
+          <div class="os-stream-filter" id="os-stream-filter" role="tablist" aria-label="Fragment filter"></div>
+        </div>
+
+        <div class="os-stream" id="os-stream" aria-live="polite"></div>
+
+        <div class="os-stream-foot" id="os-stream-foot">
+          <span class="os-arrow">›</span>
+          <span id="os-stream-foot-text">No errors. Only unresolved feelings.</span>
+        </div>
+      </main>
+
+      <!-- RIGHT: live telemetry -->
+      <aside class="os-panel os-panel-right" id="os-panel-right" aria-label="Live telemetry">
+        <section class="os-block" aria-labelledby="os-term-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-term-h">// terminal</span>
+            <span class="os-block-mini">tail -f sy.log</span>
+          </div>
+          <pre class="os-term" id="os-term"></pre>
+        </section>
+
+        <section class="os-block" aria-labelledby="os-proj-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-proj-h">// current_project</span>
+            <span class="os-block-mini" id="os-proj-branch">main</span>
+          </div>
+          <div class="os-proj-name" id="os-proj-name">vitex</div>
+          <ul class="os-kv">
+            <li><span>last commit</span><b id="os-proj-commit">— ago</b></li>
+            <li><span>files</span><b id="os-proj-files">--</b></li>
+            <li><span>diff</span><b id="os-proj-diff">+0 / -0</b></li>
+          </ul>
+        </section>
+
+        <section class="os-block" aria-labelledby="os-dev-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-dev-h">// device</span>
+            <span class="os-block-mini" id="os-dev-host">sy@kernel</span>
+          </div>
+          <ul class="os-kv">
+            <li><span>cpu</span><b><i class="os-spark" id="os-cpu-bar"></i><em id="os-cpu">--%</em></b></li>
+            <li><span>ram</span><b><i class="os-spark" id="os-ram-bar"></i><em id="os-ram">--/-- GB</em></b></li>
+            <li><span>chrome tabs</span><b id="os-tabs">47</b></li>
+            <li><span>battery</span><b id="os-battery">73%</b></li>
+          </ul>
+        </section>
+
+        <section class="os-block" aria-labelledby="os-net-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-net-h">// network</span>
+            <span class="os-block-mini" id="os-net-status">--</span>
+          </div>
+          <ul class="os-kv">
+            <li><span>ipv6</span><b id="os-ipv6">connected</b></li>
+            <li><span>warp</span><b id="os-warp">off</b></li>
+            <li><span>latency</span><b id="os-latency">-- ms</b></li>
+            <li><span>packet loss</span><b id="os-loss">0.0%</b></li>
+          </ul>
+        </section>
+
+        <section class="os-block" aria-labelledby="os-win-h">
+          <div class="os-block-head">
+            <span class="os-block-tag" id="os-win-h">// open_windows</span>
+            <span class="os-block-mini">focus</span>
+          </div>
+          <ul class="os-windows" id="os-windows">
+            <li><b>VSCode</b><i>main.ts · canary</i></li>
+            <li><b>Chrome</b><i>47 tabs</i></li>
+            <li><b>Spotify</b><i>signal lost</i></li>
+            <li><b>ChatGPT</b><i>still typing…</i></li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="os-footer" id="os-footer" aria-hidden="true">
+      <span>cached memories may be incomplete</span>
+      <span class="os-footer-sep">·</span>
+      <span id="os-footer-mid">No errors. Only unresolved feelings.</span>
+      <span class="os-footer-sep">·</span>
+      <span><a href="/">↩ exit kernel</a></span>
+    </footer>
+
+    <!-- After-2am whisper -->
+    <div class="os-whisper" id="os-whisper" aria-hidden="true">you should sleep.</div>
+
+    <script type="module" src="/src/canary.ts"></script>
+  </body>
+</html>

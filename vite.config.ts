@@ -3,11 +3,12 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { markdownPlugin } from './src/build/markdown-plugin';
 import { rssPlugin } from './src/build/rss-plugin';
+import { deepseekDevPlugin } from './src/build/deepseek-dev-plugin';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [markdownPlugin(), rssPlugin()],
+  plugins: [markdownPlugin(), rssPlugin(), deepseekDevPlugin()],
 
   resolve: {
     alias: {
@@ -20,7 +21,10 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: resolve(__dirname, 'index.html'),
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        canary: resolve(__dirname, 'canary/index.html'),
+      },
     },
   },
 
