@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>ViteX // post tool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --bg: #0b0d10;
+        --panel: rgba(15, 18, 22, 0.7);
+        --line: rgba(255, 255, 255, 0.08);
+        --line-strong: rgba(255, 255, 255, 0.18);
+        --text: #d6dbe2;
+        --dim: #7a8290;
+        --mute: #535b69;
+        --accent: #a3f7bf;
+        --accent-soft: rgba(163, 247, 191, 0.18);
+        --warn: #f7c873;
+        --err: #ff7b8a;
+        --cyan: #7fdbff;
+        --mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(900px 500px at 20% -10%, rgba(127, 219, 255, 0.06), transparent 60%),
+          linear-gradient(180deg, #07080a, #0a0c10);
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 13.5px;
+        min-height: 100vh;
+        padding: 28px 16px 80px;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+        padding-bottom: 14px;
+        border-bottom: 1px dashed var(--line);
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: -0.01em;
+        color: var(--text);
+      }
+      h1 .accent {
+        color: var(--accent);
+      }
+      header .sub {
+        color: var(--mute);
+        font-size: 11px;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 16px 18px;
+        backdrop-filter: blur(6px);
+        margin-bottom: 14px;
+      }
+      label {
+        display: block;
+        margin-bottom: 14px;
+      }
+      label > span.lbl {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: var(--mute);
+        letter-spacing: 0.06em;
+        text-transform: lowercase;
+        margin-bottom: 6px;
+      }
+      label > span.lbl em {
+        font-style: normal;
+        color: var(--dim);
+      }
+      input[type='text'],
+      textarea,
+      select {
+        width: 100%;
+        padding: 9px 12px;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--line-strong);
+        border-radius: 2px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 13.5px;
+        outline: none;
+        transition: 150ms;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 220px;
+        line-height: 1.65;
+      }
+      input[type='text']:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent-soft);
+      }
+      .row {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: 1fr 2fr;
+      }
+      .row-3 {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      @media (max-width: 600px) {
+        .row, .row-3 { grid-template-columns: 1fr; }
+      }
+      .moods {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .mood {
+        appearance: none;
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--text);
+        font-size: 18px;
+        line-height: 1;
+        padding: 6px 10px;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: 120ms;
+      }
+      .mood:hover {
+        border-color: var(--accent);
+      }
+      .mood.is-active {
+        background: var(--accent-soft);
+        border-color: var(--accent);
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+      .actions .opt {
+        margin-left: auto;
+        color: var(--dim);
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .opt label {
+        margin: 0;
+        font-size: 12px;
+        color: var(--dim);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+      .btn {
+        appearance: none;
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 13px;
+        padding: 9px 16px;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: 150ms;
+        letter-spacing: 0.04em;
+      }
+      .btn:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .btn-primary {
+        background: var(--accent-soft);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: wait;
+      }
+      .uploader {
+        border: 1px dashed var(--line-strong);
+        border-radius: 2px;
+        padding: 14px;
+        text-align: center;
+        cursor: pointer;
+        color: var(--dim);
+        font-size: 12px;
+        transition: 150ms;
+      }
+      .uploader:hover,
+      .uploader.is-drop {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(163, 247, 191, 0.06);
+      }
+      .images {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .images .img {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        border: 1px solid var(--line);
+        background: #000;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .images img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .images .rm {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid var(--err);
+        color: var(--err);
+        font-family: var(--mono);
+        font-size: 11px;
+        padding: 1px 6px;
+        cursor: pointer;
+      }
+      .preview {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--line);
+        padding: 12px 14px;
+        font-size: 12px;
+        color: var(--dim);
+        white-space: pre-wrap;
+        max-height: 240px;
+        overflow: auto;
+        border-radius: 2px;
+        line-height: 1.6;
+      }
+      .preview .ks { color: var(--cyan); }
+      .preview .vs { color: var(--accent); }
+      .status {
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--dim);
+        white-space: pre-wrap;
+      }
+      .status.is-ok { color: var(--accent); }
+      .status.is-err { color: var(--err); }
+      .recent {
+        font-size: 11.5px;
+        color: var(--dim);
+      }
+      .recent ul {
+        list-style: none;
+        margin: 8px 0 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .recent li {
+        font-variant-numeric: tabular-nums;
+        color: var(--mute);
+      }
+      .recent li b {
+        color: var(--text);
+        font-weight: 500;
+      }
+      footer {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 11px;
+        color: var(--mute);
+      }
+      .hint { color: var(--mute); font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1><span class="accent">$</span> sy.post <span class="hint">// 一键发帖</span></h1>
+        <div class="sub" id="hostInfo">localhost</div>
+      </header>
+
+      <form class="panel" id="postForm" onsubmit="return false;">
+        <label>
+          <span class="lbl">mood <em>选一个表情</em></span>
+          <div class="moods" id="moods"></div>
+          <input type="hidden" id="moodInput" value="📝" />
+        </label>
+
+        <div class="row">
+          <label>
+            <span class="lbl">slug <em>可留空，自动生成</em></span>
+            <input type="text" id="slugInput" placeholder="hello-world" autocomplete="off" />
+          </label>
+          <label>
+            <span class="lbl">tags <em>用逗号分隔</em></span>
+            <input type="text" id="tagsInput" placeholder="dev, mood, 深夜" autocomplete="off" />
+          </label>
+        </div>
+
+        <label>
+          <span class="lbl">body (markdown) <em id="charCount">0 字</em></span>
+          <textarea id="bodyInput" placeholder="在这里写点什么…&#10;&#10;支持 **markdown**、`code`、列表等。"></textarea>
+        </label>
+
+        <label>
+          <span class="lbl">images <em>支持拖入或粘贴</em></span>
+          <div class="uploader" id="uploader">
+            <span id="uploaderText">点击选择 / 拖入 / Ctrl+V 粘贴图片</span>
+            <input type="file" id="fileInput" accept="image/*" multiple hidden />
+          </div>
+          <div class="images" id="images"></div>
+        </label>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="submitBtn" type="button">▶ 保存为 .md</button>
+          <button class="btn" id="previewBtn" type="button">👁 预览</button>
+          <div class="opt">
+            <label><input type="checkbox" id="gitPush" checked /> git commit & push</label>
+          </div>
+        </div>
+
+        <pre class="preview" id="preview" hidden></pre>
+        <div class="status" id="status"></div>
+      </form>
+
+      <div class="panel recent">
+        <div class="lbl" style="display:flex;justify-content:space-between;font-size:11px;color:var(--mute);">
+          <span>// recent posts</span>
+          <button class="btn" type="button" id="refreshBtn" style="padding:2px 8px;font-size:11px;">refresh</button>
+        </div>
+        <ul id="recentList"><li>loading…</li></ul>
+      </div>
+
+      <footer>
+        sy.post · 本地工具 · 写到 <code>content/tweets/YYYY/MM/</code>
+      </footer>
+    </div>
+
+    <script>
+      const MOODS = ['😊', '🤔', '😭', '🥺', '🎉', '🔥', '💻', '☁️', '🌙', '🌧️', '☕', '⚠️', '📝', '💔', '🕯️'];
+      const moodsEl = document.getElementById('moods');
+      const moodInput = document.getElementById('moodInput');
+      const bodyEl = document.getElementById('bodyInput');
+      const charCountEl = document.getElementById('charCount');
+      const slugEl = document.getElementById('slugInput');
+      const tagsEl = document.getElementById('tagsInput');
+      const submitBtn = document.getElementById('submitBtn');
+      const previewBtn = document.getElementById('previewBtn');
+      const previewEl = document.getElementById('preview');
+      const statusEl = document.getElementById('status');
+      const gitPushEl = document.getElementById('gitPush');
+      const fileInput = document.getElementById('fileInput');
+      const uploader = document.getElementById('uploader');
+      const uploaderText = document.getElementById('uploaderText');
+      const imagesEl = document.getElementById('images');
+      const recentList = document.getElementById('recentList');
+
+      document.getElementById('hostInfo').textContent = location.host;
+
+      let uploadedImages = []; // [{url, filename}]
+      let activeMood = '📝';
+
+      function renderMoods() {
+        moodsEl.innerHTML = '';
+        for (const m of MOODS) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'mood' + (m === activeMood ? ' is-active' : '');
+          b.textContent = m;
+          b.addEventListener('click', () => {
+            activeMood = m;
+            moodInput.value = m;
+            renderMoods();
+          });
+          moodsEl.appendChild(b);
+        }
+      }
+
+      function renderImages() {
+        imagesEl.innerHTML = '';
+        uploadedImages.forEach((img, i) => {
+          const wrap = document.createElement('div');
+          wrap.className = 'img';
+          const el = document.createElement('img');
+          el.src = img.url;
+          el.alt = img.filename || '';
+          const rm = document.createElement('button');
+          rm.type = 'button';
+          rm.className = 'rm';
+          rm.textContent = '×';
+          rm.addEventListener('click', () => {
+            uploadedImages.splice(i, 1);
+            renderImages();
+          });
+          wrap.appendChild(el);
+          wrap.appendChild(rm);
+          imagesEl.appendChild(wrap);
+        });
+      }
+
+      async function uploadFiles(fileList) {
+        if (!fileList || fileList.length === 0) return;
+        const fd = new FormData();
+        for (const f of fileList) fd.append('image', f, f.name);
+        uploaderText.textContent = `上传中… (${fileList.length})`;
+        try {
+          const r = await fetch('/api/upload', { method: 'POST', body: fd });
+          const j = await r.json();
+          if (!j.ok) throw new Error(j.error || 'upload failed');
+          uploadedImages = uploadedImages.concat(j.files.map((f) => ({ url: f.url, filename: f.filename })));
+          renderImages();
+        } catch (e) {
+          setStatus('上传失败：' + e.message, 'err');
+        } finally {
+          uploaderText.textContent = '点击选择 / 拖入 / Ctrl+V 粘贴图片';
+        }
+      }
+
+      function setStatus(msg, kind) {
+        statusEl.textContent = msg || '';
+        statusEl.className = 'status' + (kind ? ' is-' + kind : '');
+      }
+
+      function buildPayload() {
+        const tags = tagsEl.value.split(/[,，]\s*/).map((s) => s.trim()).filter(Boolean);
+        return {
+          mood: moodInput.value || '📝',
+          slug: slugEl.value.trim(),
+          tags,
+          images: uploadedImages.map((i) => i.url),
+          body: bodyEl.value,
+          gitPush: gitPushEl.checked,
+        };
+      }
+
+      function buildPreview(p) {
+        const lines = ['---'];
+        lines.push('mood: ' + p.mood);
+        lines.push('created: <auto-now>');
+        if (p.tags.length) {
+          lines.push('tags:');
+          for (const t of p.tags) lines.push('  - ' + t);
+        }
+        if (p.images.length) {
+          lines.push('images:');
+          for (const u of p.images) lines.push('  - ' + u);
+        }
+        lines.push('---');
+        lines.push('');
+        lines.push(p.body);
+        return lines.join('\n');
+      }
+
+      previewBtn.addEventListener('click', () => {
+        const p = buildPayload();
+        previewEl.hidden = false;
+        previewEl.textContent = buildPreview(p);
+      });
+
+      submitBtn.addEventListener('click', async () => {
+        const p = buildPayload();
+        if (!p.body.trim()) {
+          setStatus('正文不能为空。', 'err');
+          return;
+        }
+        submitBtn.disabled = true;
+        setStatus('保存中…');
+        try {
+          const r = await fetch('/api/post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(p),
+          });
+          const j = await r.json();
+          if (!j.ok) throw new Error(j.error || 'failed');
+          let msg = '✓ 已写入 ' + j.file;
+          if (j.git) {
+            if (j.git.pushed) msg += '\n✓ git commit & push 完成';
+            else if (j.git.error) msg += '\n⚠ git 失败：' + j.git.error;
+          }
+          setStatus(msg, 'ok');
+          // reset minimal fields, keep mood
+          bodyEl.value = '';
+          slugEl.value = '';
+          tagsEl.value = '';
+          uploadedImages = [];
+          renderImages();
+          updateCharCount();
+          loadRecent();
+        } catch (e) {
+          setStatus('保存失败：' + e.message, 'err');
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+
+      uploader.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', (e) => uploadFiles(e.target.files));
+
+      ;['dragenter', 'dragover'].forEach((ev) =>
+        uploader.addEventListener(ev, (e) => {
+          e.preventDefault();
+          uploader.classList.add('is-drop');
+        }),
+      );
+      ;['dragleave', 'drop'].forEach((ev) =>
+        uploader.addEventListener(ev, (e) => {
+          e.preventDefault();
+          uploader.classList.remove('is-drop');
+        }),
+      );
+      uploader.addEventListener('drop', (e) => {
+        const files = e.dataTransfer && e.dataTransfer.files;
+        if (files && files.length) uploadFiles(files);
+      });
+
+      window.addEventListener('paste', (e) => {
+        const items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        const files = [];
+        for (const it of items) {
+          if (it.kind === 'file') {
+            const f = it.getAsFile();
+            if (f) files.push(f);
+          }
+        }
+        if (files.length) uploadFiles(files);
+      });
+
+      function updateCharCount() {
+        charCountEl.textContent = `${bodyEl.value.length} 字`;
+      }
+      bodyEl.addEventListener('input', updateCharCount);
+
+      // submit on Ctrl/Cmd+Enter
+      bodyEl.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') submitBtn.click();
+      });
+
+      async function loadRecent() {
+        try {
+          const r = await fetch('/api/posts');
+          const j = await r.json();
+          if (!j.ok) throw new Error('list failed');
+          if (j.posts.length === 0) {
+            recentList.innerHTML = '<li>(无)</li>';
+            return;
+          }
+          recentList.innerHTML = '';
+          for (const p of j.posts) {
+            const li = document.createElement('li');
+            const t = new Date(p.mtime).toLocaleString();
+            li.innerHTML = `<b>${p.path.replace(/^content\/tweets\//, '')}</b> · ${t}`;
+            recentList.appendChild(li);
+          }
+        } catch (e) {
+          recentList.innerHTML = '<li>加载失败</li>';
+        }
+      }
+
+      document.getElementById('refreshBtn').addEventListener('click', loadRecent);
+
+      renderMoods();
+      updateCharCount();
+      loadRecent();
+      bodyEl.focus();
+    </script>
+  </body>
+</html>
