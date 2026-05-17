@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; media-src https: data: blob:; script-src 'self' 'unsafe-inline'; connect-src 'self' https://meting.20110815.xyz https://restapi.amap.com;"
+    />
+    <title>Sy — Mobile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Hero -->
+      <section id="m-hero" class="sec sec-canvas"></section>
+      <!-- Featured project -->
+      <section id="m-featured" class="sec sec-canvas"></section>
+      <!-- Latest fragments (tweet stream) -->
+      <section id="m-fragments" class="sec sec-canvas"></section>
+      <!-- Dashboard cards -->
+      <section id="m-dashboard" class="sec sec-canvas"></section>
+      <!-- Now playing -->
+      <section id="m-music" class="sec sec-coral"></section>
+      <!-- Close / footer -->
+      <section id="m-close" class="sec sec-canvas"></section>
+    </div>
+    <script type="module" src="/src/mobile.ts"></script>
+  </body>
+</html>

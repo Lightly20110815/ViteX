@@ -24,6 +24,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         canary: resolve(__dirname, 'canary/index.html'),
+        mobile: resolve(__dirname, 'mobile/index.html'),
       },
     },
   },
