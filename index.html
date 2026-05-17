@@ -28,6 +28,19 @@
     </style>
     <script>
       (function () {
+        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
+        var isMobile =
+          /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+          (window.matchMedia('(pointer: coarse)').matches && window.matchMedia('(max-width: 768px)').matches);
+        if (isMobile) {
+          window.location.replace('/mobile/');
+        } else if (Math.random() < 0.5) {
+          window.location.replace('/canary/');
+        }
+      })();
+    </script>
+    <script>
+      (function () {
         var mq = window.matchMedia('(prefers-color-scheme: light)');
         document.documentElement.setAttribute('data-theme', mq.matches ? 'light' : 'dark');
         mq.addEventListener('change', function (e) {
