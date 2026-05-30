@@ -11,7 +11,7 @@ export interface ProfileData {
 export const profile: ProfileData = {
   username: 'Sy',
   bio: '🏳️‍⚧️「重构时间线，再次重逢」 | 是夕妍？ | INFP | MtFtX | oler转oder | 🎂08.15 | Vite | Cpp | HRT 25.08.11~25.11.30 26.04.17~',
-  avatarUrl: 'https://api.ddnsy.fun/avatar.webp',
+  avatarUrl: '/curve-react-logo.webp',
   backgroundUrl: 'https://bing.img.run/rand.php',
   hrtPhases: [
     { label: 'Phase 1', start: '2025-08-11', end: '2025-11-30' },
