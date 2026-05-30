@@ -8,10 +8,8 @@ export interface MetingSong {
   name: string;
   artist: string;
   url: string;
-  cover?: string;
-  pic?: string;
-  lrc?: string;
-  [k: string]: unknown;
+  cover: string;
+  lrc: string;
 }
 
 export async function getMetingList(): Promise<MetingSong[]> {
@@ -20,11 +18,16 @@ export async function getMetingList(): Promise<MetingSong[]> {
   url.searchParams.set('type', musicConfig.type);
   url.searchParams.set('id', musicConfig.id);
 
-  const res = await fetch(url);
+  const res = await fetch(url, { mode: 'cors' });
   if (!res.ok) throw new Error(`Meting API ${res.status}`);
-  const list = (await res.json()) as MetingSong[];
-  return list.map(({ pic, ...song }) => ({
-    ...song,
-    cover: song.cover ?? pic,
-  }));
+  const list = (await res.json()) as Record<string, string>[];
+  return list
+    .map((item) => ({
+      name: (item.title ?? item.name ?? '').trim(),
+      artist: (item.author ?? item.artist ?? '').trim(),
+      url: (item.url ?? '').trim(),
+      cover: (item.cover ?? item.pic ?? '').trim(),
+      lrc: (item.lrc ?? '').trim(),
+    }))
+    .filter((item) => item.name.length > 0 && item.artist.length > 0 && item.url.length > 0);
 }
