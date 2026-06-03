@@ -8,9 +8,10 @@ import { renderTimeline } from './components/Timeline';
 import { renderCanvasParticles } from './components/CanvasParticles';
 import { renderCursor } from './components/Cursor';
 import { renderTrailingCursor } from './components/TrailingCursor';
-import { createHRTTimeline } from './components/HRTTimeline';
 import { createMoodStats } from './components/MoodStats';
 import { renderMusicPlayer } from './components/MusicPlayer';
+import { initContextMenu } from './components/ContextMenu';
+import { clamp } from './utils/math';
 
 function main(): void {
   renderCanvasParticles();
@@ -21,6 +22,7 @@ function main(): void {
   renderTimeline(tweets);
   renderMusicPlayer();
   renderFooter();
+  initContextMenu();
 
   requestAnimationFrame(() => {
     const appEl = document.querySelector('.app');
@@ -38,10 +40,6 @@ function renderInsights(): void {
   const el = document.getElementById('insights');
   if (!el) return;
   el.innerHTML = '';
-
-  if (profile.hrtPhases && profile.hrtPhases.length > 0) {
-    el.appendChild(createHRTTimeline(profile.hrtPhases));
-  }
 
   const moodEl = createMoodStats(tweets);
   if (moodEl) {
@@ -105,7 +103,6 @@ function initBackgroundPanels(): void {
 }
 
 function initCardPerspective(): void {
-  const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
   let pointerX = window.innerWidth / 2;
   let pointerY = window.innerHeight / 2;
   let frame = 0;

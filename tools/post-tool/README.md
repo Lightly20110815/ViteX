@@ -4,11 +4,19 @@
 
 ## 启动
 
+推荐用 package script：
+
+```
+pnpm post:local
+```
+
+也可以直接运行：
+
 ```
 node tools/post-tool/server.mjs
 ```
 
-或者双击桌面上的 `ViteX 发帖.bat`（一键启动）。
+Windows 上可双击 `tools/post-tool/launch.cmd`。安装桌面快捷方式后，也可以双击桌面上的 `ViteX 发帖`。
 
 ## 功能
 

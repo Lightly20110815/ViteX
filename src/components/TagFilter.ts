@@ -14,18 +14,29 @@ export function createTagFilter(tweets: TweetData[]): HTMLElement | null {
   const container = document.createElement('div');
   container.className = 'tag-filter';
 
+  const header = document.createElement('div');
+  header.className = 'tag-filter-header';
+
   const title = document.createElement('h3');
   title.className = 'tag-filter-title';
-  title.textContent = '标签';
-  container.appendChild(title);
+  title.textContent = '\u6807\u7b7e';
+
+  const meta = document.createElement('span');
+  meta.className = 'tag-filter-meta';
+  meta.textContent = `${entries.length} TOPICS`;
+
+  header.appendChild(title);
+  header.appendChild(meta);
+  container.appendChild(header);
 
   const cloud = document.createElement('div');
   cloud.className = 'tag-cloud';
 
-  // "全部" button
   const allBtn = document.createElement('button');
-  allBtn.className = 'tag-cloud-item tag-cloud-active';
-  allBtn.textContent = '全部';
+  allBtn.className = 'tag-cloud-item tag-cloud-item-all tag-cloud-active';
+  allBtn.type = 'button';
+  allBtn.setAttribute('aria-pressed', 'true');
+  appendTagButtonContent(allBtn, '\u5168\u90e8', tweets.length);
   allBtn.addEventListener('click', () => {
     updateActiveTag(cloud, null);
     dispatchTagFilterEvent(null);
@@ -35,8 +46,11 @@ export function createTagFilter(tweets: TweetData[]): HTMLElement | null {
   for (const [tag, count] of entries) {
     const btn = document.createElement('button');
     btn.className = 'tag-cloud-item';
-    btn.textContent = `${tag} (${count})`;
+    btn.type = 'button';
     btn.dataset.tag = tag;
+    btn.setAttribute('aria-pressed', 'false');
+    btn.setAttribute('aria-label', `${tag}, ${count} posts`);
+    appendTagButtonContent(btn, tag, count);
     btn.addEventListener('click', () => {
       updateActiveTag(cloud, tag);
       dispatchTagFilterEvent(tag);
@@ -45,19 +59,34 @@ export function createTagFilter(tweets: TweetData[]): HTMLElement | null {
   }
 
   container.appendChild(cloud);
+
+  // Sync active state when tag filter is triggered externally (e.g. tweet tag click)
+  window.addEventListener('vitex:filter-tag', ((e: CustomEvent<string | null>) => {
+    updateActiveTag(cloud, e.detail);
+  }) as EventListener);
+
   return container;
+}
+
+function appendTagButtonContent(button: HTMLButtonElement, label: string, count: number): void {
+  const name = document.createElement('span');
+  name.className = 'tag-cloud-name';
+  name.textContent = label;
+
+  const badge = document.createElement('span');
+  badge.className = 'tag-cloud-count';
+  badge.textContent = String(count);
+
+  button.appendChild(name);
+  button.appendChild(badge);
 }
 
 function updateActiveTag(cloud: HTMLElement, active: string | null): void {
   const items = cloud.querySelectorAll('.tag-cloud-item');
   items.forEach((item, index) => {
-    if (active === null && index === 0) {
-      item.classList.add('tag-cloud-active');
-    } else if (active !== null && (item as HTMLElement).dataset.tag === active) {
-      item.classList.add('tag-cloud-active');
-    } else {
-      item.classList.remove('tag-cloud-active');
-    }
+    const isActive = active === null ? index === 0 : (item as HTMLElement).dataset.tag === active;
+    item.classList.toggle('tag-cloud-active', isActive);
+    item.setAttribute('aria-pressed', String(isActive));
   });
 }
 

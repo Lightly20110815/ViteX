@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "post:local": "node tools/post-tool/server.mjs",
+    "post:shortcut": "powershell -ExecutionPolicy Bypass -File tools/post-tool/install-desktop-shortcut.ps1",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,css,html}\" \"*.ts\" \"*.html\" \"*.json\" \"*.md\"",

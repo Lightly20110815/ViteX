@@ -34,6 +34,24 @@ pnpm dev
 
 访问 `http://localhost:3000`。
 
+## 本地一键发帖
+
+启动本地发帖工具：
+
+```bash
+pnpm post:local
+```
+
+浏览器会打开本地页面，填写 Markdown 正文、表情、标签和图片后，可勾选 `git commit & push` 一键提交并推送；Vercel 会按仓库配置自动部署。
+
+Windows 桌面快捷方式：
+
+```powershell
+pnpm post:shortcut
+```
+
+安装后双击桌面上的 `ViteX 发帖` 即可启动本地发帖页面。
+
 ## 撰写推文
 
 在 `content/tweets/YYYY/MM/` 下创建 `.md` 文件：
@@ -89,7 +107,7 @@ vitex/
 │   ├── config/
 │   │   └── site.ts           # 站点统一配置（URL、标题、描述、语言）
 │   ├── data/
-│   │   ├── profile.ts        # 用户资料（avatar、bio、HRT 阶段）
+│   │   ├── profile.ts        # 用户资料（avatar、bio）
 │   │   ├── tweets.ts         # 构建时推文收集与排序
 │   │   └── music-config.ts   # 音乐播放器配置
 │   ├── components/
@@ -98,7 +116,6 @@ vitex/
 │   │   ├── Timeline.ts       # 时间线容器 + 标签筛选
 │   │   ├── TagFilter.ts      # 标签云筛选组件
 │   │   ├── MoodStats.ts      # 情绪分布统计
-│   │   ├── HRTTimeline.ts    # HRT 阶段时间线
 │   │   ├── MusicPlayer.ts    # 音乐播放器（APlayer + Meting）
 │   │   ├── Lightbox.ts       # 图片灯箱
 │   │   ├── Cursor.ts         # 自定义光标

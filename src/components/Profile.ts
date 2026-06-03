@@ -1,5 +1,6 @@
 import { type ProfileData } from '../data/profile';
 import { createTagFilter } from './TagFilter';
+import { createWeatherCard } from './WeatherCard';
 import type { TweetData } from '../types/TweetData';
 
 export function renderProfile(data: ProfileData, tweets?: TweetData[]): void {
@@ -56,22 +57,34 @@ export function renderProfile(data: ProfileData, tweets?: TweetData[]): void {
   const bioContainer = document.createElement('div');
   bioContainer.className = 'sidebar-bio-container';
 
-  const bioParts = data.bio.split(' | ');
-  bioParts.forEach((part) => {
-    const p = document.createElement('p');
-    p.className = 'sidebar-bio-part';
+  const bioParts = data.bio
+    .split(' | ')
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const [intro] = bioParts;
 
-    if (part.length < 15 && !part.includes(' ')) {
-      p.classList.add('sidebar-bio-tag');
-    }
+  if (intro) {
+    const statusCard = document.createElement('section');
+    statusCard.className = 'sidebar-bio-card';
+    statusCard.setAttribute('aria-label', 'Profile status');
 
-    p.textContent = part;
-    bioContainer.appendChild(p);
-  });
+    const eyebrow = document.createElement('span');
+    eyebrow.className = 'sidebar-bio-eyebrow';
+    eyebrow.textContent = 'SIGNAL';
+
+    const lede = document.createElement('p');
+    lede.className = 'sidebar-bio-lede';
+    lede.textContent = intro;
+
+    statusCard.appendChild(eyebrow);
+    statusCard.appendChild(lede);
+    bioContainer.appendChild(statusCard);
+  }
 
   sidebar.appendChild(avatarContainer);
   sidebar.appendChild(username);
   sidebar.appendChild(bioContainer);
+  sidebar.appendChild(createWeatherCard());
 
   // Tag Filter
   if (tweets && tweets.length > 0) {

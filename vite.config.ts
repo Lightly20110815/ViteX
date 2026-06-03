@@ -23,7 +23,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        canary: resolve(__dirname, 'canary/index.html'),
       },
     },
   },

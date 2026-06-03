@@ -46,7 +46,7 @@ Write posts in Markdown and see them rendered in a beautiful Twitter-style timel
 ## Profile
 
 - **Username:** Sy
-- **Bio:** 🏳️‍⚧️「重构时间线，再次重逢」 | 是夕妍？ | INFP | MtFtX | oler转oder | 🎂08.15 | Vite | Cpp | HRT 25.08.11~25.11.30 26.04.17~
+- **Bio:** 🏳️‍⚧️「重构时间线，再次重逢」 | 是夕妍？ | INFP | MtFtX | oler转oder | 🎂08.15 | Vite | Cpp
 - **Avatar:** https://api.ddnsy.fun/avatar.webp
 - **Cover:** None
 - **Background:** https://bing.img.run/rand.php (CSS blur applied)

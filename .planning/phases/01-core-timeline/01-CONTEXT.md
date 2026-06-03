@@ -81,7 +81,7 @@ Greenfield project — no existing code. All patterns are to be established.
 
 - User wants the personal timeline to feel like a modern Twitter/X profile but with a personal, atmospheric touch via the Bing background + glassmorphism
 - The mood emoji in the tweet top bar is positioned as a key differentiator — give it visual presence
-- Profile bio contains emoji and should render them well: `🏳️‍⚧️「重构时间线，再次重逢」 | 是夕妍？ | INFP | MtFtX | oler转oder | 🎂08.15 | Vite | Cpp | HRT 25.08.11~25.11.30 26.04.17~`
+- Profile bio contains emoji and should render them well: `🏳️‍⚧️「重构时间线，再次重逢」 | 是夕妍？ | INFP | MtFtX | oler转oder | 🎂08.15 | Vite | Cpp`
 - Avatar: `https://api.ddnsy.fun/avatar.webp`
 
 ## Deferred Ideas

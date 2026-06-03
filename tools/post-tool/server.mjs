@@ -17,12 +17,23 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import url from 'node:url';
 import { spawn } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const TWEETS_DIR = path.join(PROJECT_ROOT, 'content', 'tweets');
 const UPLOADS_DIR = path.join(PROJECT_ROOT, 'public', 'uploads');
 const PORT = Number(process.env.POST_TOOL_PORT || 5180);
+const MAX_BODY_BYTES = 30 * 1024 * 1024;
+
+const IMAGE_CONTENT_TYPES = new Map([
+  ['image/png', '.png'],
+  ['image/jpeg', '.jpg'],
+  ['image/jpg', '.jpg'],
+  ['image/webp', '.webp'],
+  ['image/gif', '.gif'],
+  ['image/avif', '.avif'],
+]);
 
 // ---------- helpers ----------
 
@@ -34,7 +45,8 @@ function slugify(s) {
     .replace(/[\s_]+/g, '-')
     .replace(/[^a-z0-9一-龥\-]/g, '')
     .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/^-|-$/g, '')
+    .slice(0, 80);
   if (base) return base;
   return 'tweet-' + Date.now().toString(36);
 }
@@ -69,8 +81,19 @@ function nowISOWithOffset() {
 }
 
 function jsonRes(res, status, data) {
-  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.writeHead(status, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+  });
   res.end(JSON.stringify(data));
+}
+
+function textRes(res, status, text) {
+  res.writeHead(status, {
+    'Content-Type': 'text/plain; charset=utf-8',
+    'Cache-Control': 'no-store',
+  });
+  res.end(text);
 }
 
 function runCmd(cmd, args, cwd) {
@@ -90,7 +113,7 @@ function runCmd(cmd, args, cwd) {
   });
 }
 
-async function readBody(req, limitBytes = 30 * 1024 * 1024) {
+async function readBody(req, limitBytes = MAX_BODY_BYTES) {
   return new Promise((resolve, reject) => {
     const chunks = [];
     let received = 0;
@@ -108,23 +131,73 @@ async function readBody(req, limitBytes = 30 * 1024 * 1024) {
   });
 }
 
+function yamlString(value) {
+  return JSON.stringify(String(value ?? ''));
+}
+
+function normalizeStringList(value) {
+  if (!Array.isArray(value)) return [];
+  const seen = new Set();
+  const result = [];
+  for (const item of value) {
+    const text = String(item ?? '').replace(/[\r\n]/g, ' ').trim();
+    if (!text || seen.has(text)) continue;
+    seen.add(text);
+    result.push(text);
+  }
+  return result;
+}
+
 function buildMarkdown({ mood, created, images, tags, body }) {
   const lines = ['---'];
-  lines.push(`mood: ${mood || '📝'}`);
-  lines.push(`created: ${created}`);
+  lines.push(`mood: ${yamlString(mood || '📝')}`);
+  lines.push(`created: ${yamlString(created)}`);
   if (Array.isArray(tags) && tags.length > 0) {
     lines.push('tags:');
-    for (const t of tags) lines.push(`  - ${t}`);
+    for (const t of tags) lines.push(`  - ${yamlString(t)}`);
   }
   if (Array.isArray(images) && images.length > 0) {
     lines.push('images:');
-    for (const u of images) lines.push(`  - ${u}`);
+    for (const u of images) lines.push(`  - ${yamlString(u)}`);
   }
   lines.push('---');
   lines.push('');
   lines.push((body || '').trim());
   lines.push('');
   return lines.join('\n');
+}
+
+function imageUrlToGitPath(imageUrl) {
+  const value = String(imageUrl || '').trim().replace(/\\/g, '/');
+  if (!value.startsWith('/uploads/')) return null;
+  const rel = `public${value}`;
+  if (rel.includes('\0') || rel.split('/').some((part) => part === '..')) return null;
+  return rel;
+}
+
+function uniqueList(items) {
+  return [...new Set(items.filter(Boolean))];
+}
+
+function contentTypeForExt(ext) {
+  const map = {
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.webp': 'image/webp',
+    '.gif': 'image/gif',
+    '.avif': 'image/avif',
+  };
+  return map[ext.toLowerCase()] || 'application/octet-stream';
+}
+
+function resolveInside(root, relPath) {
+  const rootAbs = path.resolve(root);
+  const abs = path.resolve(rootAbs, relPath);
+  const rootCmp = rootAbs.toLowerCase();
+  const absCmp = abs.toLowerCase();
+  if (absCmp !== rootCmp && !absCmp.startsWith(rootCmp + path.sep.toLowerCase())) return null;
+  return abs;
 }
 
 // ---------- routes ----------
@@ -139,7 +212,8 @@ async function handleSavePost(req, res) {
   }
 
   const { mood, body, tags = [], images = [], slug, gitPush } = payload || {};
-  if (!body || !body.toString().trim()) {
+  const bodyText = String(body || '').trim();
+  if (!bodyText) {
     return jsonRes(res, 400, { ok: false, error: 'body required' });
   }
 
@@ -150,19 +224,21 @@ async function handleSavePost(req, res) {
   const dirAbs = path.join(TWEETS_DIR, yyyy, mm);
   await fsp.mkdir(dirAbs, { recursive: true });
 
-  const finalSlug = slugify(slug || body.slice(0, 30));
+  const finalSlug = slugify(slug || bodyText.slice(0, 30));
   let filename = `${finalSlug}.md`;
   let attempt = 1;
   while (fs.existsSync(path.join(dirAbs, filename))) {
     filename = `${finalSlug}-${attempt++}.md`;
   }
   const fileAbs = path.join(dirAbs, filename);
+  const cleanTags = normalizeStringList(tags);
+  const cleanImages = normalizeStringList(images);
   const md = buildMarkdown({
-    mood,
+    mood: String(mood || '📝').replace(/[\r\n]/g, ' ').trim() || '📝',
     created,
-    tags: tags.filter(Boolean),
-    images: images.filter(Boolean),
-    body,
+    tags: cleanTags,
+    images: cleanImages,
+    body: bodyText,
   });
   await fsp.writeFile(fileAbs, md, 'utf-8');
 
@@ -170,16 +246,20 @@ async function handleSavePost(req, res) {
 
   let gitInfo = null;
   if (gitPush) {
+    const gitPaths = uniqueList([relPath, ...cleanImages.map(imageUrlToGitPath)]);
     try {
-      const addArgs = ['add', relPath];
-      if (fs.existsSync(UPLOADS_DIR)) addArgs.push('public/uploads');
-      await runCmd('git', addArgs, PROJECT_ROOT);
-      const subject = `post: ${(body || '').replace(/\s+/g, ' ').trim().slice(0, 60)}`;
-      await runCmd('git', ['commit', '-m', subject], PROJECT_ROOT);
+      await runCmd('git', ['add', '--', ...gitPaths], PROJECT_ROOT);
+      const subject = `post: ${bodyText.replace(/\s+/g, ' ').slice(0, 60)}`;
+      const commitOut = await runCmd('git', ['commit', '--only', '-m', subject, '--', ...gitPaths], PROJECT_ROOT);
       const pushOut = await runCmd('git', ['push'], PROJECT_ROOT);
-      gitInfo = { committed: true, pushed: true, log: (pushOut.out + pushOut.err).trim() };
+      gitInfo = {
+        committed: true,
+        pushed: true,
+        files: gitPaths,
+        log: (commitOut.out + commitOut.err + pushOut.out + pushOut.err).trim(),
+      };
     } catch (e) {
-      gitInfo = { committed: false, pushed: false, error: String(e.message || e) };
+      gitInfo = { committed: false, pushed: false, files: gitPaths, error: String(e.message || e) };
     }
   }
 
@@ -216,7 +296,7 @@ function parseMultipart(buffer, boundary) {
       result.files.push({
         field: name,
         filename: fileMatch[1],
-        contentType: ctMatch ? ctMatch[1].trim() : 'application/octet-stream',
+        contentType: ctMatch ? ctMatch[1].trim().toLowerCase() : 'application/octet-stream',
         data: body,
       });
     } else {
@@ -243,8 +323,14 @@ async function handleUpload(req, res) {
 
   const saved = [];
   for (const f of parsed.files) {
-    const ext = (path.extname(f.filename) || guessExt(f.contentType) || '.bin').toLowerCase();
-    const safeName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
+    const contentExt = IMAGE_CONTENT_TYPES.get(f.contentType);
+    if (!contentExt) {
+      return jsonRes(res, 400, { ok: false, error: `unsupported image type: ${f.contentType}` });
+    }
+
+    const originalExt = path.extname(f.filename).toLowerCase();
+    const ext = [...IMAGE_CONTENT_TYPES.values()].includes(originalExt) ? originalExt : contentExt;
+    const safeName = `${Date.now()}-${randomUUID().slice(0, 8)}${ext}`;
     const abs = path.join(targetDir, safeName);
     await fsp.writeFile(abs, f.data);
     saved.push({
@@ -254,19 +340,6 @@ async function handleUpload(req, res) {
     });
   }
   return jsonRes(res, 200, { ok: true, files: saved });
-}
-
-function guessExt(ct) {
-  const map = {
-    'image/png': '.png',
-    'image/jpeg': '.jpg',
-    'image/jpg': '.jpg',
-    'image/webp': '.webp',
-    'image/gif': '.gif',
-    'image/svg+xml': '.svg',
-    'image/avif': '.avif',
-  };
-  return map[ct] || null;
 }
 
 async function handleListPosts(_req, res) {
@@ -296,6 +369,38 @@ async function handleListPosts(_req, res) {
   jsonRes(res, 200, { ok: true, posts: all.slice(0, 25) });
 }
 
+async function handleUploadedFile(req, res, pathname) {
+  if (req.method !== 'GET') return textRes(res, 405, 'method not allowed');
+
+  let rel;
+  try {
+    rel = decodeURIComponent(pathname.slice('/uploads/'.length)).replace(/\\/g, '/');
+  } catch {
+    return textRes(res, 400, 'bad path');
+  }
+  if (!rel || rel.includes('\0') || rel.split('/').some((part) => !part || part === '..')) {
+    return textRes(res, 404, 'not found');
+  }
+
+  const abs = resolveInside(UPLOADS_DIR, rel);
+  if (!abs) return textRes(res, 404, 'not found');
+
+  let stat;
+  try {
+    stat = await fsp.stat(abs);
+  } catch {
+    return textRes(res, 404, 'not found');
+  }
+  if (!stat.isFile()) return textRes(res, 404, 'not found');
+
+  res.writeHead(200, {
+    'Content-Type': contentTypeForExt(path.extname(abs)),
+    'Content-Length': stat.size,
+    'Cache-Control': 'no-store',
+  });
+  fs.createReadStream(abs).pipe(res);
+}
+
 // ---------- static (the form) ----------
 
 const FORM_HTML = fs.readFileSync(path.join(__dirname, 'form.html'), 'utf-8');
@@ -304,14 +409,15 @@ const server = http.createServer(async (req, res) => {
   try {
     const u = new URL(req.url, 'http://localhost');
     if (req.method === 'GET' && (u.pathname === '/' || u.pathname === '/index.html')) {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(FORM_HTML);
       return;
     }
     if (req.method === 'POST' && u.pathname === '/api/post') return handleSavePost(req, res);
     if (req.method === 'POST' && u.pathname === '/api/upload') return handleUpload(req, res);
     if (req.method === 'GET' && u.pathname === '/api/posts') return handleListPosts(req, res);
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    if (u.pathname.startsWith('/uploads/')) return handleUploadedFile(req, res, u.pathname);
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('not found');
   } catch (e) {
     console.error(e);
@@ -329,14 +435,17 @@ function startListening(port, attemptsLeft) {
       process.exit(1);
     }
   });
-  server.listen(port, () => {
-    const target = `http://localhost:${port}/`;
+  server.listen(port, '127.0.0.1', () => {
+    const target = `http://127.0.0.1:${port}/`;
     console.log(`\n  ViteX post tool ready → ${target}`);
-    console.log(`  project root: ${PROJECT_ROOT}\n`);
+    console.log(`  project root: ${PROJECT_ROOT}`);
+    console.log('  close this terminal window to stop the local tool.\n');
     const opener =
-      process.platform === 'win32' ? ['cmd', ['/c', 'start', '', target]] :
-      process.platform === 'darwin' ? ['open', [target]] :
-      ['xdg-open', [target]];
+      process.platform === 'win32'
+        ? ['cmd', ['/c', 'start', '', target]]
+        : process.platform === 'darwin'
+          ? ['open', [target]]
+          : ['xdg-open', [target]];
     try {
       spawn(opener[0], opener[1], { stdio: 'ignore', detached: true }).unref();
     } catch {
